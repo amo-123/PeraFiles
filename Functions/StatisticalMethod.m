@@ -1,7 +1,7 @@
 function [x_rec,y_rec,energy,error,Filt] = StatisticalMethod( Frame,Par,Tune,Filt )
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
-disp('Event Reconstruction')
+%disp'Event Reconstruction')
 %choose a sub dataset for Optical model 
 Frame_sub = Frame;
 

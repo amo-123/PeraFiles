@@ -1,6 +1,6 @@
 function [ x_rec,y_rec,Counts,energy_window ,number_det_ch] = CentroidReconstruction( Frame,Par,Filt,Energy,depict)
 
-disp('Centroid Recontruction')
+%disp'Centroid Recontruction')
 %Define number of pixels in X and Y for image sampling
 pixel = 0.2;%mm
 biny = ceil(Par.cryst_lung_y/pixel); %ceil allows to round the values of the elements of the vector between brackets to the nearest integers towards infinity

@@ -13,10 +13,10 @@
 % >> reconstructed coordinates by statistical algorithm
 % >> reconstructed energy by statistical algorithm
 % >> reconstruction error by statistical algorithm
-
-% close all
-% clear all
-% clc
+tic;
+close all
+clear all
+clc
 
 %% DATASET 
 % Set here the name of the DATASET to be reconstructed. The dataset should be organized in a N x M matrix, where N is the number of events 
@@ -24,23 +24,34 @@
 % be manually saved in 'Database' folder). 
 
 %file_name = '20170403_module9_Co57_gain15_th30_HV35e4_flood_02';
-file_name = filename(1:end-4);
+folder = uigetdir;
+files = dir(fullfile(folder,'*.mat'));
+
+LRFfolder = uigetdir;
+LRFfiles = dir(fullfile(LRFfolder,'*.mat'));
+for i = 1:length(files) %change
+fn = ['\London\X\',files(i).name];
+file_name = fn(1:end-4);
+%filepath = [files(i).folder,'\'];
+
+%file_name = 'UniformFlood_Nd01';
 
 %% LRFs for STATISTICAL RECONSTRUCTION
 % Set here the name of the file containing the LRFs (optical model) produced by 'LRF_estimation' script for the considered module.
 % The LRFs file is automatically saved by 'LRFs_estimation' in "LRFs"
 % folder.
 
-LRFs_filename = 'LRF_2017-10-26_bulmaraw_H01_F';
+%LRFs_filename = 'LRF_2017-10-26_bulmaraw_H01_F';
 
-
+LRFs_filename = LRFfiles(i).name(1:end-4);
+%LRFs_filename = 'LRFs_Node20_TestFlood';
 %% BASELINE for MODIFIED CENTROID RECONSTRUCTION
 % Set the baseline value is subtracted to the signals of all the channels. 
 % This is an arbitrary value and has to be defined by observing the result obtained in terms of reconstructed image employing the 
 % Centroid Method: the baseline value should be set so that reconstructed events cover the whole FOV. 
 % Typical values: from 400 to 600 ADC_channels.
 
-baseline = 600; % ADC_channels
+baseline = 500; % ADC_channels
 
 %% ENERGY CALIBRATION/RESOLUTION SETTING
 % Set 'En_resolution' to:
@@ -110,8 +121,9 @@ addpath(strcat(pwd,'\Models and Corrections'))
 load('Optical_model_parameters.mat') %gives 'Tune' structured variable as output
 
 % load dataset
-%Frame = CalibrationDatasetLoad(file_name);
+Frame = CalibrationDatasetLoad(file_name);
 
+% Frame(:,14) = 0;
 
 %% ENERGY SPECTRUM 
 % the EnergySpectrum function calculates the output energy (sum of the
@@ -122,13 +134,30 @@ disp('%%%%%%%%%%%%%%%%%%%% PERA %%%%%%%%%%%%%%%%%%')
 disp('>>> SELECTION of EVENTS to be reconstructed by statistical method <<<')
 disp('Select energy values related to events to be reconstructed by the statistical method:')
 disp('place the pointer on the lower limit of the range and click. Repeat the same for the upper limit.')
+%%
+% Auto Peak
+pmod = mode(output.energy1);
+energyWindowed = [output.energy1(output.energy1 > (pmod-0.1*pmod));...
+    output.energy1(output.energy1 < (pmod+0.1*pmod))];
 
-[px,py]=ginput(2);
-close all
-clc
+[c,d] = hist(energyWindowed,floor(sqrt(size(Frame,1))));
+
+fitting=GaussFit(d,c,pmod);
+x_peak=round(fitting.b1); 
+%figure, plot(d,c,'xb');
+
+en_window_perc_width=0.05; 
 % Select the energy range for data energy windowing for image filtering)
-Filt.E_min= min(px);%channels
-Filt.E_max= max(px);%channels
+%-energy windowing
+Filt.E_min=round((1-en_window_perc_width).*x_peak);
+Filt.E_max=round((1+en_window_perc_width).*x_peak);
+%% Manual peak
+% [px,py]=ginput(2);
+% close all
+% clc
+% % % Select the energy range for data energy windowing for image filtering)
+%  Filt.E_min= min(px);%channels
+%  Filt.E_max= max(px);%channels
 
 
 %% CENTROID RECONSTRUCTION 
@@ -210,6 +239,8 @@ end
 % Database_Reconstructions folder
 
 % Reconstruction savepath
-output_savepath = strcat(pwd,'\Database_Reconstructions\Rec_',file_name,'.mat');
+output_savepath = strcat(pwd,'\Database_Reconstructions\Rec_',file_name(11:end),'.mat');
 % Save reconstruction
 save(output_savepath, 'output');
+end
+toc;

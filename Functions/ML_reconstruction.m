@@ -1,7 +1,7 @@
 function [ x_rec,y_rec,En_estimated , error] = ML_reconstruction( Par,Filt,Frame)
 
 %% Maximum Likelihood reconstruction
-disp(['ML reconstruction'])
+%disp['ML reconstruction'])
 % Filt.Num_rec=size(Frame,1);
 x_rec=zeros(1,Filt.Num_rec);
 y_rec=zeros(1,Filt.Num_rec);

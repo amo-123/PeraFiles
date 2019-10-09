@@ -23,9 +23,11 @@ num_events=5000000; %number of events to display (comment this line to see all t
 FilterSpec = '*.data';
 [filename,filepath] = uigetfile([pwd,'\',FilterSpec], 'Select .data file', 'MultiSelect', 'off');
 
+[Datasize] = MS_getfilesize(filename,filepath,num_events);
+
 %load function
 if exist('num_events','var')
-   [Frame,Node,Time_stamp,modality]=openDataFile(filename,filepath,num_events);
+   [Frame,Node,Time_stamp,modality]=openDataFile(filename,filepath,num_events); % Change last argument for range of file 
    disp(strcat('last',{' '},num2str(num_events),{' '},'events loaded'))
 else
    [Frame,Node,Time_stamp,modality]=openDataFile(filename,filepath);

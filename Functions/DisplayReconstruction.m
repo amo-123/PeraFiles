@@ -6,7 +6,7 @@ function [Counts] = DisplayReconstruction( output,Par,Filt,Tune,isLRF,Unif_corre
 %  of reconstructed scintillation positions on the XY plane is computed,
 %  potentially corrected for uniformity and displayed.
 
- figure
+% figure
     biny = ceil(Par.cryst_lung_y/Par.pixel);
     binx = ceil(Par.cryst_lung_x/Par.pixel);
     
@@ -53,25 +53,25 @@ function [Counts] = DisplayReconstruction( output,Par,Filt,Tune,isLRF,Unif_corre
     % '1', the number of counts for each bin of the 2D histogram of
     % reconstructed position over the XY plane is corrected for uniformity.
     if any(strcmp('K',fieldnames(Par))) && Unif_correction
-        imagesc([0 Par.cryst_lung_x],[0 Par.cryst_lung_y],Counts.*Par.K)
+        %imagesc([0 Par.cryst_lung_x],[0 Par.cryst_lung_y],Counts.*Par.K)
         Counts = Counts.*Par.K;
     else
-        imagesc([0 Par.cryst_lung_x],[0 Par.cryst_lung_y],Counts)
+        %imagesc([0 Par.cryst_lung_x],[0 Par.cryst_lung_y],Counts)
     end
     
     %Settings for the 2D histogram of XY scintillation reconstructed
     %positions
-    set(gca,'Fontsize',15,'Fontname','Arial','FontWeight','bold')
-    xlabel('x [mm]')
-    ylabel('y [mm]')
-    hold on
-    colormap hot
-    axis equal
-    axis tight
-    colorb=colorbar;
-    set(colorb,'Fontsize',12);
-    set(colorb,'FontWeight','bold');
-    set(colorb,'Fontname','Arial');
-    drawnow;
+%     set(gca,'Fontsize',15,'Fontname','Arial','FontWeight','bold')
+%     xlabel('x [mm]')
+%     ylabel('y [mm]')
+%     hold on
+%     colormap hot
+%     axis equal
+%     axis tight
+%     colorb=colorbar;
+%     set(colorb,'Fontsize',12);
+%     set(colorb,'FontWeight','bold');
+%     set(colorb,'Fontname','Arial');
+%     drawnow;
 end
 

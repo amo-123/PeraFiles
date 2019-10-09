@@ -7,7 +7,7 @@ function [ Energy ] = EnergySpectrum( Frame , depict )
 %   (Frame). This is dispayed if "depict" is set to "1".
 
 %Energy for each of the acquired events is computed
-Energy = sum(Frame,2);
+Energy = sum(Frame-500,2);
 
 %Energy histogram is computed (the number of bins is equal to the
 %sqrtof number of acquired events
