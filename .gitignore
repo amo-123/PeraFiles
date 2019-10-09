@@ -6,3 +6,5 @@ html/
 Functions/Inpaint_nans/
 
 !/Geometries/*
+
+!/MATLAB_modified_Main_Split/Geometries/*
