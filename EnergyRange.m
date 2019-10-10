@@ -14,7 +14,7 @@ function [ enwind ] = EnergyRange(filename,filepath)
 addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split');
 addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions');
 addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Geometries');
-addpath(strcat('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions\.data Functions'));
+addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions\dataFunctions');
 
 %% Initializations
 
@@ -90,7 +90,7 @@ num_events=5000000; %number of events to display (comment this line to see all t
     rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split');
 rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions');
 rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Geometries');
-rmpath(strcat('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions\.data Functions'));
+rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions\dataFunctions');
 
     % close all
     % clear all
@@ -189,7 +189,7 @@ rmpath(strcat('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_
         % Loading tuning parameters for the iterative method
         % call of all dataset in "Models and Corrections" (Tune parameters are
         % redundant in this script)
-        addpath(strcat(pwd,'\Models and Corrections'))
+        addpath(strcat(pwd,'\Models_and_Corrections'))
         load('Optical_model_parameters.mat','Tune') %gives 'Tune' structured variable as output
         
         % load dataset
