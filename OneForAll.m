@@ -1,4 +1,4 @@
-function [ NodeData, AllData ] = OneForAll(filepath,filename)
+function [ NodeData, AllData ] = OneForAll(filepath,filename,flagkill)
 
 % FilterSpec = '*.data';
 
@@ -110,6 +110,11 @@ rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modifie
     % Set here the name of the DATASET to be reconstructed. The dataset should be organized in a N x M matrix, where N is the number of events
     % and M the number of detection channels. Such a dataset is created as 'Frame' variable by 'INSERT_reorder' script (his variable has to
     % be manually saved in 'Database' folder).
+    if flagkill
+        if length(FRAME_NODE) >= 19
+            FRAME_NODE{19,1}(:,14) = 0;
+        end
+    end
     for jj = 1:num_nodes
         % file_name = '20170403_module9_Co57_gain15_th30_HV35e4_flood_02';
         

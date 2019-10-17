@@ -43,7 +43,7 @@ file_pos = 0:2*(chunk_events*(8+channels)+4):FileSize;
 
 estimated_n_events = chunk_events;
 
-if length(file_pos) < 2
+if length(file_pos) < 3
     estimated_n_events = floor((pSize*FileSize/2)/((8+channels)*pSize+4));
     file_pos = [0,2*(estimated_n_events*(8+channels)+4),FileSize];
 end
