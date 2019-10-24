@@ -1,7 +1,7 @@
 % check empty 
 clearvars;
 
-folder = './Database_Reconstructions/RsynchFiles/Xlin';
+folder = './Database_Reconstructions/Phantom/Milan/Sensitivity';
 files = dir(fullfile(folder,'*.mat'));
 
 
@@ -22,7 +22,7 @@ for j = 1: size(data.NodeData,3)
    end
 
 end
-   fn = [filepath,'LinX_det',int2str(n),'sep.mat']; 
+   fn = [filepath,filename]; 
    save(fn,'NodeData');
    clear NodeData;
 end

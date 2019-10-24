@@ -1,4 +1,4 @@
-function [ enwind ] = EnergyRange(filename,filepath)
+function [ enwind ] = EnergyRange(filename,filepath,L_msk)
 
 %% Main to Split Nodes
 %Code to load .data files (INSERT files) and split the acquisitions from different nodes into FRAME_NODES variable
@@ -10,11 +10,11 @@ function [ enwind ] = EnergyRange(filename,filepath)
 % if ~exist('current_path', 'var')
 %     current_path = pwd;
 % end
-% current_path=strcat(current_path,'\');
-addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split');
-addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions');
-addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Geometries');
-addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions\dataFunctions');
+% current_path=strcat(current_path,'/');
+addpath(strcat(pwd,'/MATLAB_modified_Main_Split'));
+addpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions'));
+addpath(strcat(pwd,'/MATLAB_modified_Main_Split/Geometries'));
+addpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
 
 %% Initializations
 
@@ -24,7 +24,7 @@ num_events=5000000; %number of events to display (comment this line to see all t
 %% Load
 
 % FilterSpec = '*.data';
-% [filename,filepath] = uigetfile([pwd,'\',FilterSpec], 'Select .data file', 'MultiSelect', 'off');
+% [filename,filepath] = uigetfile([pwd,'/',FilterSpec], 'Select .data file', 'MultiSelect', 'off');
 
 % [Datasize] = MS_getfilesize(filename,filepath,num_events);
 % 
@@ -55,7 +55,7 @@ num_events=5000000; %number of events to display (comment this line to see all t
     end
     
     %dispstrcat('Modality:',32,modality,32,'-> Number of Nodes:',32,num2str(num_nodes)))
-    
+
     %% Check number of events x node
     
     % for n=1:num_nodes
@@ -87,10 +87,10 @@ num_events=5000000; %number of events to display (comment this line to see all t
     % >> reconstructed coordinates by statistical algorithm
     % >> reconstructed energy by statistical algorithm
     % >> reconstruction error by statistical algorithm
-    rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split');
-rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions');
-rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Geometries');
-rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions\dataFunctions');
+rmpath(strcat(pwd,'/MATLAB_modified_Main_Split'));
+rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions'));
+rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Geometries'));
+rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
 
     % close all
     % clear all
@@ -111,7 +111,7 @@ rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modifie
         % Set here the name of the file containing the LRFs (optical model) produced by 'LRF_estimation' script for the considered module.
         % The LRFs file is automatically saved by 'LRFs_estimation' in "LRFs"
         % folder.
-%         lrf_folder = '.\LRFs\';
+%         lrf_folder = './LRFs/';
 %         lrf_files = dir(fullfile(lrf_folder,'*.mat'));
 %         
 %         LRFs_filename = lrf_files(jj);
@@ -142,9 +142,9 @@ rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modifie
         % Par.cryst_lung_y := lenght of the camera scintillator in the Y direction
         % num_detect_x := number of detector columns in the X direction
         % num_detect_y := number of detector raws in the Y direction
-        addpath(strcat(pwd,'\Geometries'))
-        addpath(strcat(pwd,'\Functions'))
-        addpath(strcat(pwd,'\Database'))
+        addpath(strcat(pwd,'/Geometries'))
+        addpath(strcat(pwd,'/Functions'))
+        addpath(strcat(pwd,'/Database'))
         load('INSERT_Clinical.mat','Par')% Geometrical Parameters are saved in "Par" struct
         
         % Define sampling parameters and arrays for the Optical Model Map
@@ -189,12 +189,36 @@ rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modifie
         % Loading tuning parameters for the iterative method
         % call of all dataset in "Models and Corrections" (Tune parameters are
         % redundant in this script)
-        addpath(strcat(pwd,'\Models_and_Corrections'))
+        addpath(strcat(pwd,'/Models_and_Corrections'))
         load('Optical_model_parameters.mat','Tune') %gives 'Tune' structured variable as output
         
         % load dataset
         % Frame = CalibrationDatasetLoad(file_name);
         Frame = FRAME_NODE{jj};
+        %%
+        %Neighbourhood mask (KE)
+        %Baseline subraction
+        Frame_sub=Frame-600;
+        Frame_sub(Frame_sub<0)=0;
+        
+        if ( L_msk )
+            nx = 6;  ny = 12;
+            nv = size(Frame,1);
+            [~,ii_max] = max(Frame,[],2);
+            ix = mod( ii_max-1, nx ) + 1;
+            iy = fix( (ii_max-1) / nx ) + 1;
+            msk = zeros([nx,ny,nv]);
+            ix1=ix-2; ix1(ix1<1)=1; ix2=ix+2; ix2(ix2>nx)=nx;
+            iy1=iy-1; iy1(iy1<1)=1; iy2=iy+1; iy2(iy2>ny)=ny;
+            jx1=ix-1; jx1(jx1<1)=1; jx2=ix+1; jx2(jx2>nx)=nx;
+            jy1=iy-2; jy1(jy1<1)=1; jy2=iy+2; jy2(jy2>ny)=ny;
+            for iv=1:nv
+                msk( ix1(iv):ix2(iv), iy1(iv):iy2(iv), iv )=1;
+                msk( jx1(iv):jx2(iv), jy1(iv):jy2(iv), iv )=1;
+            end
+            msk = reshape( msk, [nx*ny,nv] )';
+            Frame_sub = Frame_sub .* msk;
+        end
         
         %% ENERGY SPECTRUM
         % the EnergySpectrum function calculates the output energy (sum of the
@@ -213,12 +237,14 @@ rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modifie
             output.energy1(output.energy1 < (pmod+0.1*pmod))];
         
         [c,d] = hist(energyWindowed,floor(sqrt(size(Frame,1))));
+        [a,b] = hist(energyWindowed,floor(sqrt(size(Frame_sub,1))));
         
         fitting=GaussFit(d,c,pmod);
         x_peak=round(fitting.b1);
-        %figure, plot(d,c,'xb');
-        
-        en_window_perc_width=0.1;
+%         figure, plot(d,c,'xb');
+%         figure, plot(b,a,'xr');
+
+        en_window_perc_width=0.2;
         % Select the energy range for data energy windowing for image filtering)
         %-energy windowing
         E_min=round((1-en_window_perc_width).*x_peak);

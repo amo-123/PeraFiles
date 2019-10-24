@@ -11,7 +11,7 @@ end
 current_path=strcat(current_path,'\');
 addpath('Functions');
 addpath('Geometries');
-addpath(strcat('Functions\.data Functions'));
+addpath(strcat('Functions\dataFunctions'));
 
 %% Initializations
 
