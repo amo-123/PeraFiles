@@ -1,14 +1,16 @@
 
+*.m~
 *.mat
+*.asv
 
 html/
 
 Functions/Inpaint_nans/
 
-!/Geometries/*
+/Geometries/*
 
-!/MATLAB_modified_Main_Split/Geometries/*
+/MATLAB_modified_Main_Split/Geometries/*
 
-!/Models_and_Corrections/*
+/Models_and_Corrections/*
 
-!/LRFs/*
+/LRFs/*

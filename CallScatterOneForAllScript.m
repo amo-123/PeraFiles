@@ -1,14 +1,15 @@
 %% One for all script 
-function CallOneForAllScript(folder, uflag, Ufile, outname)
+function CallScatterOneForAllScript(folder)
 % folder = uigetdir;
 files = dir(fullfile(folder,'*.data'));
 % FilterSpec = '*.data';
 
-for i = 1:1
+for i = 1:length(files)
+
 filename = files(i).name;
 filepath = [files(i).folder,'/'];
 
-[ NodeData, AllData ] = OneForAll(filepath, filename, 1, uflag, Ufile, outname);
+[ NodeData, AllData ] = ScatterOneForAll(filepath,filename,1,0);
 
 end
 

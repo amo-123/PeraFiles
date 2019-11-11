@@ -1,0 +1,311 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2018 The MathWorks, Inc.
+              R2018b Update 3 (9.5.0.1049112) 64-bit (glnxa64)
+                              January 30, 2019
+
+ 
+To get started, type doc.
+For product information, visit www.mathworks.com.
+ 
+    'Loading .data File: PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position17_3cmSpacers_03.data'
+
+time resolution = 2.5e-08
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position17_3cmSpacers_03.data'
+
+time resolution = 2.5e-08
+     4
+
+modality=Clinical
+Elapsed time is 45.633107 seconds.
+[Warning: File:
+/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/Functions/ML_reconstruction.m
+Line: 35 Column: 29
+The temporary variable grid_index will be cleared at the beginning of each
+iteration of the parfor loop.
+Any value assigned to it before the loop will be lost.  If grid_index is used
+before it is assigned in the parfor loop, a runtime error will occur.
+See Parallel for Loops in MATLAB, "Temporary Variables".] 
+[> In StatisticalMethod (line 10)
+  In OneForAll (line 303)
+  In CallOneForAllScript (line 12)] 
+[Warning: File:
+/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/Functions/ML_reconstruction.m
+Line: 42 Column: 26
+The temporary variable N_estimated will be cleared at the beginning of each
+iteration of the parfor loop.
+Any value assigned to it before the loop will be lost.  If N_estimated is used
+before it is assigned in the parfor loop, a runtime error will occur.
+See Parallel for Loops in MATLAB, "Temporary Variables".] 
+[> In StatisticalMethod (line 10)
+  In OneForAll (line 303)
+  In CallOneForAllScript (line 12)] 
+[Warning: File:
+/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/Functions/ML_reconstruction.m
+Line: 42 Column: 47
+The temporary variable ln_L will be cleared at the beginning of each iteration
+of the parfor loop.
+Any value assigned to it before the loop will be lost.  If ln_L is used before
+it is assigned in the parfor loop, a runtime error will occur.
+See Parallel for Loops in MATLAB, "Temporary Variables".] 
+[> In StatisticalMethod (line 10)
+  In OneForAll (line 303)
+  In CallOneForAllScript (line 12)] 
+[Warning: File:
+/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/Functions/ML_reconstruction.m
+Line: 60 Column: 20
+The temporary variable row will be cleared at the beginning of each iteration
+of the parfor loop.
+Any value assigned to it before the loop will be lost.  If row is used before
+it is assigned in the parfor loop, a runtime error will occur.
+See Parallel for Loops in MATLAB, "Temporary Variables".] 
+[> In StatisticalMethod (line 10)
+  In OneForAll (line 303)
+  In CallOneForAllScript (line 12)] 
+[Warning: File:
+/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/Functions/ML_reconstruction.m
+Line: 59 Column: 20
+The temporary variable col will be cleared at the beginning of each iteration
+of the parfor loop.
+Any value assigned to it before the loop will be lost.  If col is used before
+it is assigned in the parfor loop, a runtime error will occur.
+See Parallel for Loops in MATLAB, "Temporary Variables".] 
+[> In StatisticalMethod (line 10)
+  In OneForAll (line 303)
+  In CallOneForAllScript (line 12)] 
+Starting parallel pool (parpool) using the 'local' profile ...
+connected to 12 workers.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position17_3cmSpacers_03.data'
+
+time resolution = 2.5e-08
+     4
+
+modality=Clinical
+Elapsed time is 59.614723 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position17_3cmSpacers_03.data'
+
+time resolution = 2.5e-08
+     4
+
+modality=Clinical
+Elapsed time is 55.838643 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position17_3cmSpacers_03.data'
+
+time resolution = 2.5e-08
+     4
+
+modality=Clinical
+Elapsed time is 46.871595 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position17_3cmSpacers_03.data'
+
+time resolution = 2.5e-08
+     4
+
+modality=Clinical
+Elapsed time is 45.315641 seconds.
+    'Loading .data File: PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position17_3cmSpacers_04.data'
+
+time resolution = 2.5e-08
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position17_3cmSpacers_04.data'
+
+time resolution = 2.5e-08
+     5
+
+modality=Clinical
+Elapsed time is 55.708375 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position17_3cmSpacers_04.data'
+
+time resolution = 2.5e-08
+     5
+
+modality=Clinical
+Elapsed time is 53.153202 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position17_3cmSpacers_04.data'
+
+time resolution = 2.5e-08
+     5
+
+modality=Clinical
+Elapsed time is 57.456691 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position17_3cmSpacers_04.data'
+
+time resolution = 2.5e-08
+     5
+
+modality=Clinical
+Elapsed time is 61.313325 seconds.
+    'Loading .data File: PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position17_3cmSpacers_05.data'
+
+time resolution = 2.5e-08
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position17_3cmSpacers_05.data'
+
+time resolution = 2.5e-08
+     6
+
+modality=Clinical
+Elapsed time is 64.915428 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position17_3cmSpacers_05.data'
+
+time resolution = 2.5e-08
+     6
+
+modality=Clinical
+Elapsed time is 48.616961 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position17_3cmSpacers_05.data'
+
+time resolution = 2.5e-08
+     6
+
+modality=Clinical
+Elapsed time is 70.551221 seconds.
+    'Loading .data File: PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position17_3cmSpacers_06.data'
+
+time resolution = 2.5e-08
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position17_3cmSpacers_06.data'
+
+time resolution = 2.5e-08
+     7
+
+modality=Clinical
+Elapsed time is 78.942762 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position17_3cmSpacers_06.data'
+
+time resolution = 2.5e-08
+     7
+
+modality=Clinical
+Elapsed time is 64.616544 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position17_3cmSpacers_06.data'
+
+time resolution = 2.5e-08
+     7
+
+modality=Clinical
+Elapsed time is 58.709034 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position17_3cmSpacers_06.data'
+
+time resolution = 2.5e-08
+     7
+
+modality=Clinical
+Elapsed time is 45.964407 seconds.
+    'Loading .data File: PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position6_rotate158deg_3cmSpacers_00.data'
+
+time resolution = 2.5e-08
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position6_rotate158deg_3cmSpacers_00.data'
+
+time resolution = 2.5e-08
+     8
+
+modality=Clinical
+Elapsed time is 52.807349 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position6_rotate158deg_3cmSpacers_00.data'
+
+time resolution = 2.5e-08
+     8
+
+modality=Clinical
+Elapsed time is 48.038554 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position6_rotate158deg_3cmSpacers_00.data'
+
+time resolution = 2.5e-08
+     8
+
+modality=Clinical
+Elapsed time is 49.320512 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position6_rotate158deg_3cmSpacers_00.data'
+
+time resolution = 2.5e-08
+     8
+
+modality=Clinical
+Elapsed time is 50.294218 seconds.
+    'Loading .data File: PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position6_rotate158deg_3cmSpacers_01.data'
+
+time resolution = 2.5e-08
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position6_rotate158deg_3cmSpacers_01.data'
+
+time resolution = 2.5e-08
+     9
+
+modality=Clinical
+Elapsed time is 50.283760 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position6_rotate158deg_3cmSpacers_01.data'
+
+time resolution = 2.5e-08
+     9
+
+modality=Clinical
+Elapsed time is 53.973176 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position6_rotate158deg_3cmSpacers_01.data'
+
+time resolution = 2.5e-08
+     9
+
+modality=Clinical
+Elapsed time is 55.198085 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position6_rotate158deg_3cmSpacers_01.data'
+
+time resolution = 2.5e-08
+     9
+
+modality=Clinical
+Elapsed time is 56.142693 seconds.
+    'Loading .data File: PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position6_rotate158deg_3cmSpacers_02.data'
+
+time resolution = 2.5e-08
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position6_rotate158deg_3cmSpacers_02.data'
+
+time resolution = 2.5e-08
+    10
+
+modality=Clinical
+Elapsed time is 55.192858 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position6_rotate158deg_3cmSpacers_02.data'
+
+time resolution = 2.5e-08
+    10
+
+modality=Clinical
+Elapsed time is 59.901285 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position6_rotate158deg_3cmSpacers_02.data'
+
+time resolution = 2.5e-08
+    10
+
+modality=Clinical
+Elapsed time is 63.505385 seconds.
+    'Loading .data File: PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position6_rotate158deg_3cmSpacers_03.data'
+
+time resolution = 2.5e-08
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position6_rotate158deg_3cmSpacers_03.data'
+
+time resolution = 2.5e-08
+    11
+
+modality=Clinical
+Elapsed time is 54.036625 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position6_rotate158deg_3cmSpacers_03.data'
+
+time resolution = 2.5e-08
+    11
+
+modality=Clinical
+Elapsed time is 51.862876 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position6_rotate158deg_3cmSpacers_03.data'
+
+time resolution = 2.5e-08
+    11
+
+modality=Clinical
+Elapsed time is 58.866930 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/PhantomWithSpheres/Correct_Spacer/PhantomWithSpheres_60MBq_ratio8to1_Tm10_gain12_th30_hv35_2kill_position6_rotate158deg_3cmSpacers_03.data'
+
+time resolution = 2.5e-08
+    11
+
+modality=Clinical
+Elapsed time is 54.109263 seconds.
+elapsed time: 7810.40s
+meory usage: 10610168 KB
+cpu usage: 80%

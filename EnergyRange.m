@@ -16,6 +16,7 @@ addpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions'));
 addpath(strcat(pwd,'/MATLAB_modified_Main_Split/Geometries'));
 addpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
 
+
 %% Initializations
 
 %determine if the user wants to open only the last num_events
@@ -88,9 +89,10 @@ num_events=5000000; %number of events to display (comment this line to see all t
     % >> reconstructed energy by statistical algorithm
     % >> reconstruction error by statistical algorithm
 rmpath(strcat(pwd,'/MATLAB_modified_Main_Split'));
-rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions'));
 rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Geometries'));
+rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions'));
 rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
+
 
     % close all
     % clear all
@@ -243,8 +245,7 @@ rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
         x_peak=round(fitting.b1);
 %         figure, plot(d,c,'xb');
 %         figure, plot(b,a,'xr');
-
-        en_window_perc_width=0.2;
+        en_window_perc_width=0.15;
         % Select the energy range for data energy windowing for image filtering)
         %-energy windowing
         E_min=round((1-en_window_perc_width).*x_peak);

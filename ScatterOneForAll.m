@@ -1,14 +1,21 @@
-function [ NodeData, AllData ] = OneForAll(filepath,filename,flagkill,uflag,EW,outname)
+function [ NodeData, AllData ] = ScatterOneForAll(filepath,filename,flagkill,uflag)
 
 % FilterSpec = '*.data';
 
+%[Ufilename,Ufilepath] = uigetfile([pwd,'\',FilterSpec], 'Select .data file', 'MultiSelect', 'off');
 if uflag
     Ufilepath = '/SAN/inm/FDG/amoINSERT/Week_1/20190306/Flood/';
-    Ufilepath = 'E:/Week_1/20190306/Flood/';
+    %Ufilename = '5ml1Mbq_Tc99m_flood_Tm10_hv35_gain12_th30_all_2min_00.data';
     Ufilename = '5ml1Mbq_Tc99m_flood_Tm10_hv35_gain12_th30_all_long_00.data';
     [ enwind ] = EnergyRange(Ufilename,Ufilepath,1);
 else
-   load(EW,'enwind'); 
+    %load('EnergyWindows.mat','enwind');
+   %load('/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/EnergyWindows/Cylinder_02_EW.mat','enwind');
+   % load('/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/EnergyWindows/ScatEW_Hoffman2D.mat','scatwind');
+   % load('/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/EnergyWindows/ScatCylinder_02_EW.mat','scatwind');
+   % load('/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/EnergyWindows/ScatEW_PhantomWithSpheres.mat','scatwind');
+   load('/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/EnergyWindows/ScatEW_ColdRods.mat','scatwind');
+    enwind = scatwind;
 end
 
 %% Main to Split Nodes
@@ -21,6 +28,13 @@ end
 % if ~exist('current_path', 'var')
 %     current_path = pwd;
 % end
+% current_path=strcat(current_path,'\');
+% <<<<<<< Updated upstream
+% addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split');
+% addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions');
+% addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Geometries');
+% addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions\dataFunctions');
+% =======
 addpath(strcat(pwd,'/MATLAB_modified_Main_Split'));
 addpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions'));
 addpath(strcat(pwd,'/MATLAB_modified_Main_Split/Geometries'));
@@ -34,8 +48,8 @@ num_events=5000000; %number of events to display (comment this line to see all t
 
 %% Load
 
-%[filename,filepath] = uigetfile([pwd,'/',FilterSpec], 'Select .data file', 'MultiSelect', 'off');
-% filepath = 'E:/Week 2/20190313_part2/CylinderPhantom/';
+%[filename,filepath] = uigetfile([pwd,'\',FilterSpec], 'Select .data file', 'MultiSelect', 'off');
+% filepath = 'E:\Week 2\20190313_part2\CylinderPhantom\';
 % filename = 'cylinder_50Mbq_Tc99m_Tm10_gain12_th30_hv35_2kill_06.data';
 
 [Datasize] = MS_getfilesize(filename,filepath,num_events);
@@ -48,7 +62,7 @@ for ii = 1:Datasize - 1
         [Frame,Node,~,modality]=openDataFileMod(filename,filepath,num_events,ii); % Change last argument for range of file
         %disp(strcat('last',{' '},num2str(num_events),{' '},'events loaded'))
     else
-        [Frame,Node,~,modality]=openDataFileMod(filename,filepath);
+        [Frame,Node,~,modality]=openDataFile(filename,filepath);
         %disp('all events loaded')
     end
     
@@ -99,7 +113,13 @@ for ii = 1:Datasize - 1
     % >> reconstructed coordinates by statistical algorithm
     % >> reconstructed energy by statistical algorithm
     % >> reconstruction error by statistical algorithm
-rmpath(strcat(pwd,'/MATLAB_modified_Main_Split'));
+% <<<<<<< Updated upstream
+%     rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split');
+% rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions');
+% rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Geometries');
+% rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions\dataFunctions');
+% =======
+    rmpath(strcat(pwd,'/MATLAB_modified_Main_Split'));
 rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions'));
 rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Geometries'));
 rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
@@ -204,7 +224,9 @@ rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
         % Loading tuning parameters for the iterative method
         % call of all dataset in "Models and Corrections" (Tune parameters are
         % redundant in this script)
-        addpath(strcat(pwd,'/Models_and_Corrections'))
+
+        addpath(strcat(pwd,'/Models_and_Corrections'));
+
         load('Optical_model_parameters.mat','Tune'); %gives 'Tune' structured variable as output
         
         % load dataset
@@ -297,7 +319,33 @@ rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
         
         Par.pixel = 0.2;%mm
         [output.Statistical_Counts]=DisplayReconstruction(output,Par,Filt,Tune,0,0);
-
+%         hold on
+%         set(gca,'Fontsize',14,'Fontname','Arial','FontWeight','bold')
+%         title('Statistical Reconstruction','Fontname','Arial','FontWeight','bold')
+        
+        
+        %% RECONSTRUCTED ENERGY HISTOGRAM, ENERGY CALIBRATION and RESOLUTION
+%         energy_max = 1.5e+5;%ADC channels; valore al quale si vuole venga tagliato il plot dello spettro di energia
+%         
+%         if En_resolution == 1
+%             %Energy peaks for spectrum calibration (these values have to be set in
+%             %order to compute energy resolution)
+%             %disp'>>> ENERGY CALIBRATION AND RESOLUTION <<<')
+%             Filt.E_calibration_min = input('Energy of lower energy peak [keV]: ');%keV
+%             Filt.E_calibration_max =  input('Energy of higher energy peak [keV]: '); %keV
+%             clc
+%             
+%         end
+        
+%         [Energy_Resolution, fitresult_energy_calibration, ~] = Reconstructed_Energy(output,energy_max,Filt,0,1,En_resolution);
+%         
+%         if En_resolution == 1
+%             calibration_line = coeffvalues(fitresult_energy_calibration);
+%             
+%             %dispstrcat('Energy calibration line is: Energy[keV] = ', num2str(calibration_line(1)),' * Energy[ADC_channels] + (', num2str(calibration_line(2)), ')'))
+%             %dispstrcat('Energy resolution (FWHM of reconstructed energy spectrum) is: ', num2str(Energy_Resolution), '%'))
+%             
+%         end
         
         %% SAVE RECONSTRUCTION
         % Reconstructed event positions (X,Y), energy, reconstruction error are
@@ -307,6 +355,16 @@ rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
         AllData{ii,jj} = output;
         
     end
+% <<<<<<< Updated upstream
+%             rmpath(strcat(pwd,'\Geometries'));
+%         rmpath(strcat(pwd,'\Functions'));
+%         rmpath(strcat(pwd,'\Database'));
+%         
+%     addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split');
+% addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions');
+% addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Geometries');
+% addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions\dataFunctions');
+% =======
             rmpath(strcat(pwd,'/Geometries'));
         rmpath(strcat(pwd,'/Functions'));
         rmpath(strcat(pwd,'/Database'));
@@ -319,8 +377,14 @@ addpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
 
 end
 
-% Reconstruction savepath
+% output_savepath = strcat(pwd,'\Database_Reconstructions\All_nodes_',filename(1:end-5),'.mat');
+% save(output_savepath,'AllData')
 
+
+% Reconstruction savepath
+% output_savepath = strcat(pwd,'\Database_Reconstructions\Rec_',file_name,'.mat');
+% % Save reconstruction
+% save(output_savepath, 'output');
 chunkData = zeros(258,506,Datasize-1);
 NodeData = zeros(258,506,num_nodes);
 for k = 1:num_nodes
@@ -330,7 +394,7 @@ for k = 1:num_nodes
     NodeData(:,:,k) = sum(chunkData,3);
     chunkData = zeros(258,506,Datasize-1);
 end
-output_savepath = strcat(pwd,'/Database_Reconstructions/Full_Rec_',outname,filename(1:end-5),'.mat');
+output_savepath = strcat(pwd,'/Database_Reconstructions/ScatterWindow_',filename(1:end-5),'.mat');
 save(output_savepath,'NodeData');
 
 end
