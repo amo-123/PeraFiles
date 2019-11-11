@@ -1,0 +1,297 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2018 The MathWorks, Inc.
+              R2018b Update 3 (9.5.0.1049112) 64-bit (glnxa64)
+                              January 30, 2019
+
+ 
+To get started, type doc.
+For product information, visit www.mathworks.com.
+ 
+    'Loading .data File: ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle0_00.data'
+
+time resolution = 2.5e-08
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle0_00.data'
+
+time resolution = 2.5e-08
+     4
+
+modality=Clinical
+Elapsed time is 57.613665 seconds.
+[Warning: File:
+/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/Functions/ML_reconstruction.m
+Line: 35 Column: 29
+The temporary variable grid_index will be cleared at the beginning of each
+iteration of the parfor loop.
+Any value assigned to it before the loop will be lost.  If grid_index is used
+before it is assigned in the parfor loop, a runtime error will occur.
+See Parallel for Loops in MATLAB, "Temporary Variables".] 
+[> In StatisticalMethod (line 10)
+  In OneForAll (line 303)
+  In CallOneForAllScript (line 12)] 
+[Warning: File:
+/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/Functions/ML_reconstruction.m
+Line: 42 Column: 26
+The temporary variable N_estimated will be cleared at the beginning of each
+iteration of the parfor loop.
+Any value assigned to it before the loop will be lost.  If N_estimated is used
+before it is assigned in the parfor loop, a runtime error will occur.
+See Parallel for Loops in MATLAB, "Temporary Variables".] 
+[> In StatisticalMethod (line 10)
+  In OneForAll (line 303)
+  In CallOneForAllScript (line 12)] 
+[Warning: File:
+/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/Functions/ML_reconstruction.m
+Line: 42 Column: 47
+The temporary variable ln_L will be cleared at the beginning of each iteration
+of the parfor loop.
+Any value assigned to it before the loop will be lost.  If ln_L is used before
+it is assigned in the parfor loop, a runtime error will occur.
+See Parallel for Loops in MATLAB, "Temporary Variables".] 
+[> In StatisticalMethod (line 10)
+  In OneForAll (line 303)
+  In CallOneForAllScript (line 12)] 
+[Warning: File:
+/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/Functions/ML_reconstruction.m
+Line: 60 Column: 20
+The temporary variable row will be cleared at the beginning of each iteration
+of the parfor loop.
+Any value assigned to it before the loop will be lost.  If row is used before
+it is assigned in the parfor loop, a runtime error will occur.
+See Parallel for Loops in MATLAB, "Temporary Variables".] 
+[> In StatisticalMethod (line 10)
+  In OneForAll (line 303)
+  In CallOneForAllScript (line 12)] 
+[Warning: File:
+/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/Functions/ML_reconstruction.m
+Line: 59 Column: 20
+The temporary variable col will be cleared at the beginning of each iteration
+of the parfor loop.
+Any value assigned to it before the loop will be lost.  If col is used before
+it is assigned in the parfor loop, a runtime error will occur.
+See Parallel for Loops in MATLAB, "Temporary Variables".] 
+[> In StatisticalMethod (line 10)
+  In OneForAll (line 303)
+  In CallOneForAllScript (line 12)] 
+Starting parallel pool (parpool) using the 'local' profile ...
+connected to 12 workers.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle0_00.data'
+
+time resolution = 2.5e-08
+     4
+
+modality=Clinical
+Elapsed time is 63.027752 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle0_00.data'
+
+time resolution = 2.5e-08
+     4
+
+modality=Clinical
+Elapsed time is 64.635322 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle0_00.data'
+
+time resolution = 2.5e-08
+     4
+
+modality=Clinical
+Elapsed time is 65.316394 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle0_00.data'
+
+time resolution = 2.5e-08
+     4
+
+modality=Clinical
+Elapsed time is 60.122033 seconds.
+    'Loading .data File: ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle0_01.data'
+
+time resolution = 2.5e-08
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle0_01.data'
+
+time resolution = 2.5e-08
+     5
+
+modality=Clinical
+Elapsed time is 56.013788 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle0_01.data'
+
+time resolution = 2.5e-08
+     5
+
+modality=Clinical
+Elapsed time is 51.651301 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle0_01.data'
+
+time resolution = 2.5e-08
+     5
+
+modality=Clinical
+Elapsed time is 61.747228 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle0_01.data'
+
+time resolution = 2.5e-08
+     5
+
+modality=Clinical
+Elapsed time is 61.255121 seconds.
+    'Loading .data File: ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle0_02.data'
+
+time resolution = 2.5e-08
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle0_02.data'
+
+time resolution = 2.5e-08
+     6
+
+modality=Clinical
+Elapsed time is 60.610994 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle0_02.data'
+
+time resolution = 2.5e-08
+     6
+
+modality=Clinical
+Elapsed time is 56.984857 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle0_02.data'
+
+time resolution = 2.5e-08
+     6
+
+modality=Clinical
+Elapsed time is 61.087285 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle0_02.data'
+
+time resolution = 2.5e-08
+     6
+
+modality=Clinical
+Elapsed time is 58.505075 seconds.
+    'Loading .data File: ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle0_03.data'
+
+time resolution = 2.5e-08
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle0_03.data'
+
+time resolution = 2.5e-08
+     7
+
+modality=Clinical
+Elapsed time is 55.616225 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle0_03.data'
+
+time resolution = 2.5e-08
+     7
+
+modality=Clinical
+Elapsed time is 58.668023 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle0_03.data'
+
+time resolution = 2.5e-08
+     7
+
+modality=Clinical
+Elapsed time is 61.490825 seconds.
+    'Loading .data File: ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle1_00.data'
+
+time resolution = 2.5e-08
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle1_00.data'
+
+time resolution = 2.5e-08
+     8
+
+modality=Clinical
+Elapsed time is 50.912151 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle1_00.data'
+
+time resolution = 2.5e-08
+     8
+
+modality=Clinical
+Elapsed time is 48.649357 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle1_00.data'
+
+time resolution = 2.5e-08
+     8
+
+modality=Clinical
+Elapsed time is 43.126709 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle1_00.data'
+
+time resolution = 2.5e-08
+     8
+
+modality=Clinical
+Elapsed time is 51.332419 seconds.
+    'Loading .data File: ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle1_01.data'
+
+time resolution = 2.5e-08
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle1_01.data'
+
+time resolution = 2.5e-08
+     9
+
+modality=Clinical
+Elapsed time is 60.242076 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle1_01.data'
+
+time resolution = 2.5e-08
+     9
+
+modality=Clinical
+Elapsed time is 56.926408 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle1_01.data'
+
+time resolution = 2.5e-08
+     9
+
+modality=Clinical
+Elapsed time is 50.108138 seconds.
+    'Loading .data File: ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle1_04.data'
+
+time resolution = 2.5e-08
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle1_04.data'
+
+time resolution = 2.5e-08
+    10
+
+modality=Clinical
+Elapsed time is 52.100554 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle1_04.data'
+
+time resolution = 2.5e-08
+    10
+
+modality=Clinical
+Elapsed time is 62.527400 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle1_04.data'
+
+time resolution = 2.5e-08
+    10
+
+modality=Clinical
+Elapsed time is 55.709597 seconds.
+    'Loading .data File: ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle1_07.data'
+
+time resolution = 2.5e-08
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle1_07.data'
+
+time resolution = 2.5e-08
+    11
+
+modality=Clinical
+Elapsed time is 53.224970 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle1_07.data'
+
+time resolution = 2.5e-08
+    11
+
+modality=Clinical
+Elapsed time is 50.810262 seconds.
+    'Loading .data File: /SAN/inm/FDG/amoINSERT/Week_2/20190313/ColdRodsPhantom/ColdRods_50MBq_Tc99m_Tm10_gain12_th30_hv35_2kill_angle1_07.data'
+
+time resolution = 2.5e-08
+    11
+
+modality=Clinical
+Elapsed time is 56.437747 seconds.
+elapsed time: 6964.66s
+meory usage: 10663620 KB
+cpu usage: 77%

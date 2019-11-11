@@ -1,6 +1,6 @@
 function [Data,nodeID,timestamp,modality] = openDataFileMod(File_Name,File_Path,chunk_events,ii)
 
-disp(strcat('Loading .data File:',{' '},File_Name));
+disp(strcat('Loading .data File:',{' '},File_Path,File_Name));
 
 %initializations and parameters
 time_res = 25e-9; 
@@ -9,7 +9,7 @@ disp(strcat('time resolution =',32,num2str(time_res)));
 %% File opening
 
 fid = fopen([File_Path,File_Name],'r','b'); %windows
-
+disp(fid);
 %check file dimension
 fseek(fid,0,'eof');
 FileSize=ftell(fid); %location of the file position indicator is indicated in bytes from the beginning of the file
@@ -43,7 +43,7 @@ file_pos = 0:2*(chunk_events*(8+channels)+4):FileSize;
 
 estimated_n_events = chunk_events;
 
-if length(file_pos) < 2
+if length(file_pos) < 3
     estimated_n_events = floor((pSize*FileSize/2)/((8+channels)*pSize+4));
     file_pos = [0,2*(estimated_n_events*(8+channels)+4),FileSize];
 end

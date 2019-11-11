@@ -1,4 +1,4 @@
-function [ NodeData, AllData ] = OneForAll(filepath,filename,flagkill,uflag,EW,outname)
+function [ NodeData, AllData ] = ScatterOneForAll(filepath,filename,flagkill,uflag)
 
 % FilterSpec = '*.data';
 
@@ -7,12 +7,15 @@ if uflag
     Ufilepath = '/SAN/inm/FDG/amoINSERT/Week_1/20190306/Flood/';
     %Ufilename = '5ml1Mbq_Tc99m_flood_Tm10_hv35_gain12_th30_all_2min_00.data';
     Ufilename = '5ml1Mbq_Tc99m_flood_Tm10_hv35_gain12_th30_all_long_00.data';
-    [ enwind ] = EnergyRange(Ufilename,Ufilepath);
+    [ enwind ] = EnergyRange(Ufilename,Ufilepath,1);
 else
     %load('EnergyWindows.mat','enwind');
    %load('/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/EnergyWindows/Cylinder_02_EW.mat','enwind');
-    %load('/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/EnergyWindows/EW_Hoffman2D.mat','enwind');
-   load(EW,'enwind'); 
+   % load('/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/EnergyWindows/ScatEW_Hoffman2D.mat','scatwind');
+   % load('/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/EnergyWindows/ScatCylinder_02_EW.mat','scatwind');
+   % load('/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/EnergyWindows/ScatEW_PhantomWithSpheres.mat','scatwind');
+   load('/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/EnergyWindows/ScatEW_ColdRods.mat','scatwind');
+    enwind = scatwind;
 end
 
 %% Main to Split Nodes
@@ -391,7 +394,7 @@ for k = 1:num_nodes
     NodeData(:,:,k) = sum(chunkData,3);
     chunkData = zeros(258,506,Datasize-1);
 end
-output_savepath = strcat(pwd,'/Database_Reconstructions/Full_Rec_',outname,filename(1:end-5),'.mat');
+output_savepath = strcat(pwd,'/Database_Reconstructions/ScatterWindow_',filename(1:end-5),'.mat');
 save(output_savepath,'NodeData');
 
 end

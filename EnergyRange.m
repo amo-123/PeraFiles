@@ -11,10 +11,17 @@ function [ enwind ] = EnergyRange(filename,filepath)
 %     current_path = pwd;
 % end
 % current_path=strcat(current_path,'\');
-addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split');
-addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions');
-addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Geometries');
-addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions\dataFunctions');
+% <<<<<<< Updated upstream
+% addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split');
+% addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions');
+% addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Geometries');
+% addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions\dataFunctions');
+% =======
+addpath(strcat(pwd,'/MATLAB_modified_Main_Split'));
+addpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions'));
+addpath(strcat(pwd,'/MATLAB_modified_Main_Split/Geometries'));
+addpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
+
 
 %% Initializations
 
@@ -87,10 +94,17 @@ num_events=5000000; %number of events to display (comment this line to see all t
     % >> reconstructed coordinates by statistical algorithm
     % >> reconstructed energy by statistical algorithm
     % >> reconstruction error by statistical algorithm
-    rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split');
-rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions');
-rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Geometries');
-rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions\dataFunctions');
+% <<<<<<< Updated upstream
+%     rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split');
+% rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions');
+% rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Geometries');
+% rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions\dataFunctions');
+% =======
+rmpath(strcat(pwd,'/MATLAB_modified_Main_Split'));
+rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions'));
+rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Geometries'));
+rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
+
 
     % close all
     % clear all
@@ -142,9 +156,9 @@ rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modifie
         % Par.cryst_lung_y := lenght of the camera scintillator in the Y direction
         % num_detect_x := number of detector columns in the X direction
         % num_detect_y := number of detector raws in the Y direction
-        addpath(strcat(pwd,'\Geometries'))
-        addpath(strcat(pwd,'\Functions'))
-        addpath(strcat(pwd,'\Database'))
+        addpath(strcat(pwd,'/Geometries'))
+        addpath(strcat(pwd,'/Functions'))
+        addpath(strcat(pwd,'/Database'))
         load('INSERT_Clinical.mat','Par')% Geometrical Parameters are saved in "Par" struct
         
         % Define sampling parameters and arrays for the Optical Model Map
@@ -189,7 +203,8 @@ rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modifie
         % Loading tuning parameters for the iterative method
         % call of all dataset in "Models and Corrections" (Tune parameters are
         % redundant in this script)
-        addpath(strcat(pwd,'\Models_and_Corrections'))
+
+        addpath(strcat(pwd,'/Models_and_Corrections'))
         load('Optical_model_parameters.mat','Tune') %gives 'Tune' structured variable as output
         
         % load dataset
@@ -218,7 +233,7 @@ rmpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modifie
         x_peak=round(fitting.b1);
         %figure, plot(d,c,'xb');
         
-        en_window_perc_width=0.1;
+        en_window_perc_width=0.15;
         % Select the energy range for data energy windowing for image filtering)
         %-energy windowing
         E_min=round((1-en_window_perc_width).*x_peak);
