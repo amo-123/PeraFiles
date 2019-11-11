@@ -16,7 +16,8 @@ scatwind = zeros(20,2);
 scatwind(:,2) = enwind(:,1);
 diff = enwind(:,2) - enwind(:,1);
 scatwind(:,1) = scatwind(:,2) - diff/2;
-save([pwd,'\Scat',filename],'scatwind')
+enwind = scatwind;
+save([pwd,'\Scat',filename],'enwind')
 catch 
     
 end 

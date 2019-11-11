@@ -99,7 +99,7 @@ addpath(strcat(pwd,'\Functions'));
 addpath(strcat(pwd,'\Models and Corrections'))
 
 %% OPTICAL MODEL ESTIMATION (all modules)
-for m = 2:size(Name,2)
+for m = 16:size(Name,2)
     
 	clearvars -except m Name Filt Tune LRFs_sampling image_show
     close all
