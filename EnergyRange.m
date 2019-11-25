@@ -50,6 +50,9 @@ num_events=5000000; %number of events to display (comment this line to see all t
     %divide datasets of different nodes
 %     FRAME_NODE{num_nodes,1}=0;
     FRAME_NODE = cell(num_nodes,1);
+    
+    [~,ic1] = max( Frame, [], 2 ); 
+    Frame = Frame( ic1>6, : );
 
     for n=1:num_nodes
         FRAME_NODE{n,1}=Frame(Node==n,:);

@@ -3,7 +3,7 @@ function [ NodeData, AllData ] = OneForAll(filepath,filename,flagkill,uflag,EW,o
 % FilterSpec = '*.data';
 
 if uflag
-    Ufilepath = '/SAN/inm/FDG/amoINSERT/Week_1/20190306/Flood/';
+    %Ufilepath = '/SAN/inm/FDG/amoINSERT/Week_1/20190306/Flood/';
     Ufilepath = 'E:/Week_1/20190306/Flood/';
     Ufilename = '5ml1Mbq_Tc99m_flood_Tm10_hv35_gain12_th30_all_long_00.data';
     [ enwind ] = EnergyRange(Ufilename,Ufilepath,1);
@@ -60,6 +60,9 @@ for ii = 1:Datasize - 1
     
     %divide datasets of different nodes
 %     FRAME_NODE{num_nodes,1}=0;
+    [~,ic1] = max( Frame, [], 2 );
+    Frame = Frame( ic1>6, : );
+    
     FRAME_NODE = cell(num_nodes,1);
 
     for n=1:num_nodes
