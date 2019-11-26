@@ -51,13 +51,18 @@ num_events=5000000; %number of events to display (comment this line to see all t
 %     FRAME_NODE{num_nodes,1}=0;
     FRAME_NODE = cell(num_nodes,1);
     
-    [~,ic1] = max( Frame, [], 2 ); 
-    Frame = Frame( ic1>6, : );
+%     [~,ic1] = max( Frame, [], 2 ); 
+%     Frame = Frame( ic1>6, : );
 
     for n=1:num_nodes
+        try
         FRAME_NODE{n,1}=Frame(Node==n,:);
+        catch 
+        FRAME_NODE{n,1}= [];
+        end
     end
-    
+    FRAME_NODE = FRAME_NODE(~cellfun('isempty',FRAME_NODE));
+    num_nodes=length(FRAME_NODE);
     %dispstrcat('Modality:',32,modality,32,'-> Number of Nodes:',32,num2str(num_nodes)))
 
     %% Check number of events x node
@@ -108,7 +113,7 @@ rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
     
     enwind = zeros(20,2);
     
-    for jj = 1:20
+    for jj = 1:num_nodes
         % file_name = '20170403_module9_Co57_gain15_th30_HV35e4_flood_02';
         
         
@@ -200,6 +205,9 @@ rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
         % load dataset
         % Frame = CalibrationDatasetLoad(file_name);
         Frame = FRAME_NODE{jj};
+        
+        [~,ic1] = max( Frame, [], 2 );
+        Frame = Frame( ic1>6, : );
         %%
         %Neighbourhood mask (KE)
         %Baseline subraction

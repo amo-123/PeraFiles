@@ -122,6 +122,8 @@ load('Optical_model_parameters.mat') %gives 'Tune' structured variable as output
 
 % load dataset
 Frame = CalibrationDatasetLoad(file_name);
+    [~,ic1] = max( Frame, [], 2 ); 
+    Frame = Frame( ic1>6, : );
 
 % Frame(:,14) = 0;
 
@@ -144,7 +146,7 @@ energyWindowed = [output.energy1(output.energy1 > (pmod-0.1*pmod));...
 
 fitting=GaussFit(d,c,pmod);
 x_peak=round(fitting.b1); 
-%figure, plot(d,c,'xb');
+figure, plot(d,c,'xb');
 
 en_window_perc_width=0.05; 
 % Select the energy range for data energy windowing for image filtering)
