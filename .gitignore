@@ -2,6 +2,8 @@
 *.m~
 *.mat
 *.asv
+*.o*
+*log*
 
 html/
 

@@ -1,13 +1,20 @@
-function [ NodeData, AllData ] = OneForAll(filepath,filename,flagkill,uflag,EW,outname)
-
+function [ NodeData, AllData ] = OneForAll(filepath,filename,flagkill,uflag,Ufilepath,Ufilename,EW,outname)
+% filepath: data file folder
+% filename: data file name
+% flagkill: kill node 19 channel
+% uflag: use flood spectra 
+% Ufilepath: flood file folder
+% Ufilename: flood file name 
+% EW: Energy window file, if manual is required 
+% outname: unique file identifier for output 
 % FilterSpec = '*.data';
 
 %[Ufilename,Ufilepath] = uigetfile([pwd,'\',FilterSpec], 'Select .data file', 'MultiSelect', 'off');
 if uflag
-    Ufilepath = '/SAN/inm/FDG/amoINSERT/Week_1/20190306/Flood/';
-    %Ufilename = '5ml1Mbq_Tc99m_flood_Tm10_hv35_gain12_th30_all_2min_00.data';
-    Ufilename = '5ml1Mbq_Tc99m_flood_Tm10_hv35_gain12_th30_all_long_00.data';
-    [ enwind ] = EnergyRange(Ufilename,Ufilepath);
+ %   Ufilepath = '/SAN/inm/FDG/amoINSERT/Week_1/20190306/Flood/';
+   
+ %   Ufilename = '5ml1Mbq_Tc99m_flood_Tm10_hv35_gain12_th30_all_2min_00.data';
+    [ enwind ] = EnergyRange(Ufilename,Ufilepath,1);
 else
     %load('EnergyWindows.mat','enwind');
    %load('/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/EnergyWindows/Cylinder_02_EW.mat','enwind');
@@ -74,9 +81,15 @@ for ii = 1:Datasize - 1
     FRAME_NODE = cell(num_nodes,1);
 
     for n=1:num_nodes
+        try
         FRAME_NODE{n,1}=Frame(Node==n,:);
+        catch 
+        FRAME_NODE{n,1}= [];
+        end
     end
-    
+    FRAME_NODE = FRAME_NODE(~cellfun('isempty',FRAME_NODE));
+    num_nodes=length(FRAME_NODE);    
+
     %dispstrcat('Modality:',32,modality,32,'-> Number of Nodes:',32,num2str(num_nodes)))
     
     %% Check number of events x node
