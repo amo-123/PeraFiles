@@ -1,12 +1,13 @@
-function [ NodeData, AllData ] = OneForAll(filepath,filename,flagkill,uflag,Ufilepath,Ufilename,EW,normflag, outname)
+function [ NodeData, AllData ] = OneForAll(filepath,filename,uflag,Ufilepath,Ufilename,EW,normflag,killchnl, outname)
 % filepath: data file folder
 % filename: data file name
-% flagkill: kill node 19 channel
 % uflag: use flood spectra 
 % Ufilepath: flood file folder
 % Ufilename: flood file name 
 % EW: Energy window file, if manual is required 
+% killchnl: matrix of pk targets 
 % outname: unique file identifier for output 
+
 % FilterSpec = '*.data';
 
 %[Ufilename,Ufilepath] = uigetfile([pwd,'\',FilterSpec], 'Select .data file', 'MultiSelect', 'off');
@@ -15,15 +16,17 @@ if uflag
    
  %   Ufilename = '5ml1Mbq_Tc99m_flood_Tm10_hv35_gain12_th30_all_2min_00.data';
     [ enwind ] = EnergyRange(Ufilename,Ufilepath,1);
+    disp('EW found from U data');
 elseif exist('EW','var') == 1
         load(EW,'enwind'); 
+        disp('Manual EW');
 else
     %load('EnergyWindows.mat','enwind');
    %load('/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/EnergyWindows/Cylinder_02_EW.mat','enwind');
     %load('/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/EnergyWindows/EW_Hoffman2D.mat','enwind');
 %   load(EW,'enwind'); 
     [ enwind ] = EnergyRange(filename,filepath,1);
-
+    disp('EW found from data');
 end
 
 %% Main to Split Nodes
@@ -68,7 +71,7 @@ for ii = 1:Datasize - 1
     %load function
     if exist('num_events','var')
         [Frame,Node,~,modality]=openDataFileMod(filename,filepath,num_events,ii); % Change last argument for range of file
-        %disp(strcat('last',{' '},num2str(num_events),{' '},'events loaded'))
+        disp(strcat('batch ', num2str(ii),' event loaded'));
     else
         [Frame,Node,~,modality]=openDataFile(filename,filepath);
         %disp('all events loaded')
@@ -147,21 +150,24 @@ rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
     % Set here the name of the DATASET to be reconstructed. The dataset should be organized in a N x M matrix, where N is the number of events
     % and M the number of detection channels. Such a dataset is created as 'Frame' variable by 'INSERT_reorder' script (his variable has to
     % be manually saved in 'Database' folder).
-    if flagkill
-        if length(FRAME_NODE) >= 13 %19
-            %FRAME_NODE{19,1}(:,14) = 0;
-            n_chan = 72;  ny = 6; % nz = 12;
-            jj_chan = (0:n_chan-1);
-            ii_chan = ( (mod(jj_chan,ny)>2) & (fix(jj_chan/ny)>5) );
-            FRAME_NODE{13,1}(:,ii_chan) = 0;
-        end
-        
 
-        
-    end
     for jj = 1:num_nodes
         % file_name = '20170403_module9_Co57_gain15_th30_HV35e4_flood_02';
-        
+
+%         if length(FRAME_NODE) >= 13 %19
+%             %FRAME_NODE{19,1}(:,14) = 0;
+%             n_chan = 72;  ny = 6; % nz = 12;
+%             jj_chan = (0:n_chan-1);
+%             ii_chan = ( (mod(jj_chan,ny)>2) & (fix(jj_chan/ny)>5) );
+%             FRAME_NODE{13,1}(:,ii_chan) = 0;
+%         end
+        for kk = 1:n_chan
+            if killchnl(jj,kk) == 1
+                FRAME_NODE{jj,1}(:,kk) = zeros(size(FRAME_NODE{jj,1}(:,kk)));
+                disp(strcat('Node ', num2str(jj),' Channel ', num2str(kk), ' Killed.'));
+            end
+        end
+
         
         %% LRFs for STATISTICAL RECONSTRUCTION
         % Set here the name of the file containing the LRFs (optical model) produced by 'LRF_estimation' script for the considered module.
@@ -293,6 +299,7 @@ rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
         % Filt.E_max= max(px);%channels
         
         %% Normalise Channel Events
+        disp('Channel Normalisation');
         if normflag == 1
             ch = sum(Frame);
             ch1 = ones(1,n_chan);
@@ -315,6 +322,7 @@ rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
         % events that follow the filter conditions
        % [output.x_rec_CM,output.y_rec_CM,output.Centroid_Counts,Filt.energy_window] = CentroidReconstruction(Frame,Par,Filt,output.energy1,0);
         %[output.x_rec_CM,output.y_rec_CM,output.Centroid_Counts,Filt.energy_window] = CentroidReconstructionKE(Frame,Par,Filt);
+        disp('Centroid Recon')
         [output.x_rec_CM,output.y_rec_CM,output.Centroid_Counts,Filt.energy_window] = CentroidRecon(Frame,Par,Filt);
 
         
@@ -331,6 +339,25 @@ rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
         load(strcat(pwd,'/LRFs/', LRFs_filename,'.mat'),'LRFs');
         [Par.LRF] = LRF_Load(size(Frame,2),LRFs,Par);
         
+        for kk = 1:n_chan
+            if killchnl(jj,kk) == 1
+                Par.LRF(kk,:,:) = zeros(size(Par.LRF(kk,:,:)));
+                disp(strcat('LRF Node ', num2str(jj),' Channel ', num2str(kk), ' Killed.'));
+            end
+        end
+        
+%         if normflag == 1
+%             ch = sum(Frame);
+%             ch1 = ones(1,n_chan);
+%             if ( max(ch) > 0 )
+%                 ii_chan = ( ch > 0 );
+%                 ch1(ii_chan) = ch(ii_chan) / mean( ch(ii_chan) );
+%             end
+%             
+%             
+%             nrm = ones(size(Frame,1),1) * ch1;
+%             Frame = Frame ./ nrm;
+%         end
         
         %% STATISTICAL METHOD RECONSTRUCTION
         
@@ -355,6 +382,7 @@ rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
         % 2D histogram of the reconstructed positions (XY)
         
         Par.pixel = 0.2;%mm
+        disp('ML Recon');
         [output.Statistical_Counts]=DisplayReconstruction(output,Par,Filt,Tune,0,0);
 %         hold on
 %         set(gca,'Fontsize',14,'Fontname','Arial','FontWeight','bold')
@@ -433,6 +461,7 @@ for k = 1:num_nodes
 end
 output_savepath = strcat(pwd,'/Database_Reconstructions/Full_Rec_',outname,filename(1:end-5),'.mat');
 save(output_savepath,'NodeData','enwind');
+disp('Saved!');
 
 end
 

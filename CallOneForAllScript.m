@@ -1,5 +1,5 @@
 %% One for all script 
-function CallOneForAllScript(folder, uflag, Ufolder, EW, outname)
+function CallOneForAllScript(folder, uflag, Ufolder, EW, killmsk, outname)
 % folder: directory to get file from 
 % uflag: use 1 for uniform flood spectra 
 % Ufolder: Location of uni flood 
@@ -15,12 +15,16 @@ if uflag
     Ufolder = [Ufolder,'/'];
 end
 
+killdir = strcat(pwd,'/Database/',killmsk);
+
+killchnl = load(killdir,'killch');
+
 for i = 1:length(files)
 
 filename = files(i).name;
 filepath = [files(i).folder,'/'];
 
-[ NodeData, AllData ] = OneForAll(filepath, filename, 1, uflag, Ufolder, Ufile, EW, 1, outname);
+[ ~, ~ ] = OneForAll(filepath, filename, uflag, Ufolder, Ufile, EW, 1, killchnl.killch, outname);
 
 end
 toc;

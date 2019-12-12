@@ -250,7 +250,7 @@ rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
             output.energy1(output.energy1 < (pmod+0.1*pmod))];
         
         [c,d] = hist(energyWindowed,floor(sqrt(size(Frame,1))));
-        [a,b] = hist(energyWindowed,floor(sqrt(size(Frame_sub,1))));
+        [~,~] = hist(energyWindowed,floor(sqrt(size(Frame_sub,1))));
         
         fitting=GaussFit(d,c,pmod);
         x_peak=round(fitting.b1);
@@ -265,4 +265,5 @@ rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
     enwind(jj,:) = [E_min,E_max];
         
     end
+end
    

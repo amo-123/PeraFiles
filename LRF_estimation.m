@@ -22,26 +22,26 @@ clc
 %% CALIBRATION DATASETS%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Write the name of the calibration dataset (saved in 'Database') to be used for  the calibration of each module:
 
-Name{1} = 'UniformFlood_Nd01'; % Calibration dataset for module #1
-Name{2} = 'UniformFlood_Nd02';
-Name{3} = 'UniformFlood_Nd03';
-Name{4} = 'UniformFlood_Nd04';
-Name{5} = 'UniformFlood_Nd05';
-Name{6} = 'UniformFlood_Nd06';
-Name{7} = 'UniformFlood_Nd07';
-Name{8} = 'UniformFlood_Nd08';
-Name{9} = 'UniformFlood_Nd09';
-Name{10} = 'UniformFlood_Nd10';
-Name{11} = 'UniformFlood_Nd11';
-Name{12} = 'UniformFlood_Nd12';
-Name{13} = 'UniformFlood_Nd13';
-Name{14} = 'UniformFlood_Nd14';
-Name{15} = 'UniformFlood_Nd15';
-Name{16} = 'UniformFlood_Nd16';
-Name{17} = 'UniformFlood_Nd17';
-Name{18} = 'UniformFlood_Nd18';
-Name{19} = 'UniformFlood_Nd19';
-Name{20} = 'UniformFlood_Nd20'; % Calibration dataset for module #20
+Name{1} = 'UniformFlood_MilanLongNokill_Nd01'; % Calibration dataset for module #1
+Name{2} = 'UniformFlood_MilanLongNokill_Nd02';
+Name{3} = 'UniformFlood_MilanLongNokill_Nd03';
+Name{4} = 'UniformFlood_MilanLongNokill_Nd04';
+Name{5} = 'UniformFlood_MilanLongNokill_Nd05';
+Name{6} = 'UniformFlood_MilanLongNokill_Nd06';
+Name{7} = 'UniformFlood_MilanLongNokill_Nd07';
+Name{8} = 'UniformFlood_MilanLongNokill_Nd08';
+Name{9} = 'UniformFlood_MilanLongNokill_Nd09';
+Name{10} = 'UniformFlood_MilanLongNokill_Nd10';
+Name{11} = 'UniformFlood_MilanLongNokill_Nd11';
+Name{12} = 'UniformFlood_MilanLongNokill_Nd12';
+Name{13} = 'UniformFlood_MilanLongNokill_Nd13';
+Name{14} = 'UniformFlood_MilanLongNokill_Nd14';
+Name{15} = 'UniformFlood_MilanLongNokill_Nd15';
+Name{16} = 'UniformFlood_MilanLongNokill_Nd16';
+Name{17} = 'UniformFlood_MilanLongNokill_Nd17';
+Name{18} = 'UniformFlood_MilanLongNokill_Nd18';
+Name{19} = 'UniformFlood_MilanLongNokill_Nd19';
+Name{20} = 'UniformFlood_MilanLongNokill_Nd20'; % Calibration dataset for module #20
 
 % disp('%%%%%%%%%%%%%%%%%%%% PERA %%%%%%%%%%%%%%%%%%')
 % disp('>>> CALIBRATION DATASETS <<<');
@@ -99,7 +99,7 @@ addpath(strcat(pwd,'\Functions'));
 addpath(strcat(pwd,'\Models and Corrections'))
 
 %% OPTICAL MODEL ESTIMATION (all modules)
-for m = 16:size(Name,2)
+for m = 1:size(Name,2)
     
 	clearvars -except m Name Filt Tune LRFs_sampling image_show
     close all
@@ -109,6 +109,19 @@ for m = 16:size(Name,2)
 %% LOADING CALIBRATION DATASET %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Frame = CalibrationDatasetLoad(Dataset_filename);
 
+%% Normalise 
+
+        ch = sum(Frame);
+        ch1 = ones(1,72);
+        if ( max(ch) > 0 )
+            ii_chan = ( ch > 0 );
+            ch1(ii_chan) = ch(ii_chan) / mean( ch(ii_chan) );
+        end
+        
+        
+        nrm = ones(size(Frame,1),1) * ch1;
+        Frame_init = Frame; 
+        Frame = Frame ./ nrm;
 
 %% ENERGY SPECTRUM %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % the EnergySpectrum function computes the histogram of the sum of the
@@ -156,7 +169,7 @@ Filt.E_max=round((1+en_window_perc_width).*x_peak);
 % LRFs savepath
 LRFs_savepath = strcat(pwd,'\LRFs\LRFs_',Dataset_filename,'.mat');
 % Reconstruction savepath
-output_savepath = strcat(pwd,'\Database_Reconstructions\rec_20191015_',Dataset_filename,'.mat');
+output_savepath = strcat(pwd,'\Database_Reconstructions\rec_UniNorm_',Dataset_filename,'.mat');
 
 save(LRFs_savepath,'LRFs');
 save(output_savepath, 'output');

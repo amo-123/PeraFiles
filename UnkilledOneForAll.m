@@ -1,5 +1,5 @@
 %% One for all script 
-function UnkillOneForAll(folder, uflag, Ufolder, EW, outname)
+function UnkilledOneForAll(folder, uflag, Ufolder, EW, outname)
 % folder: directory to get file from 
 % uflag: use 1 for uniform flood spectra 
 % Ufolder: Location of uni flood 
