@@ -25,7 +25,7 @@ else
    %load('/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/EnergyWindows/Cylinder_02_EW.mat','enwind');
     %load('/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/EnergyWindows/EW_Hoffman2D.mat','enwind');
 %   load(EW,'enwind'); 
-    [ enwind ] = EnergyRange(filename,filepath,1);
+    [ enwind ] = EnergyRange(filename,filepath,1,killchnl);
     disp('EW found from data');
 end
 
@@ -71,7 +71,7 @@ for ii = 1:Datasize - 1
     %load function
     if exist('num_events','var')
         [Frame,Node,~,modality]=openDataFileMod(filename,filepath,num_events,ii); % Change last argument for range of file
-        disp(strcat('batch ', num2str(ii),' event loaded'));
+        disp(strcat('batch #', num2str(ii),' event loaded'));
     else
         [Frame,Node,~,modality]=openDataFile(filename,filepath);
         %disp('all events loaded')
@@ -152,6 +152,7 @@ rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
     % be manually saved in 'Database' folder).
 
     for jj = 1:num_nodes
+        disp(strcat('Node #', num2str(jj),' Calculating...'));
         % file_name = '20170403_module9_Co57_gain15_th30_HV35e4_flood_02';
 
 %         if length(FRAME_NODE) >= 13 %19
@@ -162,9 +163,9 @@ rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
 %             FRAME_NODE{13,1}(:,ii_chan) = 0;
 %         end
         for kk = 1:n_chan
-            if killchnl(jj,kk) == 1
+            if killchnl(jj,kk) == 1 || killchnl(jj,kk) == 2
                 FRAME_NODE{jj,1}(:,kk) = zeros(size(FRAME_NODE{jj,1}(:,kk)));
-                disp(strcat('Node ', num2str(jj),' Channel ', num2str(kk), ' Killed.'));
+                disp(strcat('Node #', num2str(jj),' Channel #', num2str(kk), ' Killed.'));
             end
         end
 
@@ -175,9 +176,11 @@ rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
         % folder.
         lrf_folder = './LRFs/';
         lrf_files = dir(fullfile(lrf_folder,'*.mat'));
-        
-        LRFs_filename = lrf_files(jj).name(1:end-4);
-        
+        if num_nodes == 1
+            LRFs_filename = lrf_files(n).name(1:end-4);
+        else 
+            LRFs_filename = lrf_files(jj).name(1:end-4);
+        end
         
         %% BASELINE for MODIFIED CENTROID RECONSTRUCTION
         % Set the baseline value is subtracted to the signals of all the channels.
@@ -337,14 +340,20 @@ rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
         
         % Loading and sampling of the analytical selected LRF
         load(strcat(pwd,'/LRFs/', LRFs_filename,'.mat'),'LRFs');
-        [Par.LRF] = LRF_Load(size(Frame,2),LRFs,Par);
+        disp(strcat('Loading LRF -',LRFs_filename));
         
         for kk = 1:n_chan
-            if killchnl(jj,kk) == 1
-                Par.LRF(kk,:,:) = zeros(size(Par.LRF(kk,:,:)));
-                disp(strcat('LRF Node ', num2str(jj),' Channel ', num2str(kk), ' Killed.'));
+            if killchnl(jj,kk) == 2
+                LRFs{kk}.a = 0.02;
+                LRFs{kk}.b = 16;
+                LRFs{kk}.c = 16;
+                disp(strcat('LRF Node #', num2str(jj),' Channel #', num2str(kk), ' Killed.'));
             end
         end
+        
+        [Par.LRF] = LRF_Load(size(Frame,2),LRFs,Par);
+        
+
         
 %         if normflag == 1
 %             ch = sum(Frame);

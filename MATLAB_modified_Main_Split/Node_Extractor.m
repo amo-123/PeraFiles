@@ -12,7 +12,7 @@ flag.offsets_subtraction = 0;
 valori_impulsazione=100:100:900;
 zero_thr=10;
 saturation_thr=4085;
-en_window_perc_width=0.1; 
+en_window_perc_width=0.06; 
 %en_window_perc_width=1; 
 %% Geometry
 

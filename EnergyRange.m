@@ -1,4 +1,4 @@
-function [ enwind ] = EnergyRange(filename,filepath,L_msk)
+function [ enwind ] = EnergyRange(filename,filepath,L_msk,killchnl)
 
 %% Main to Split Nodes
 %Code to load .data files (INSERT files) and split the acquisitions from different nodes into FRAME_NODES variable
@@ -21,7 +21,7 @@ addpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
 
 %determine if the user wants to open only the last num_events
 num_events=5000000; %number of events to display (comment this line to see all the events)
-
+n_chan = 72;
 %% Load
 
 % FilterSpec = '*.data';
@@ -204,6 +204,14 @@ rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
         
         % load dataset
         % Frame = CalibrationDatasetLoad(file_name);
+        % kill mask for each channel 
+        for kk = 1:n_chan
+            if killchnl(jj,kk) == 1 || killchnl(jj,kk) == 2
+                FRAME_NODE{jj,1}(:,kk) = zeros(size(FRAME_NODE{jj,1}(:,kk)));
+                disp(strcat('Node #', num2str(jj),' Channel #', num2str(kk), ' Killed.'));
+            end
+        end
+        
         Frame = FRAME_NODE{jj};
         
         [~,ic1] = max( Frame, [], 2 );
