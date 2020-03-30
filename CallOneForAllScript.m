@@ -9,11 +9,11 @@ tic;
 % folder = uigetdir;
 files = dir(fullfile(folder,'*.data'));
 % FilterSpec = '*.data';
-if uflag
+
     Ufiles = dir(fullfile(Ufolder,'*.data'));
     Ufile = Ufiles(1).name;
     Ufolder = [Ufolder,'/'];
-end
+    
 
 killdir = strcat(pwd,'/Database/',killmsk);
 

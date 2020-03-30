@@ -15,7 +15,7 @@ if uflag
  %   Ufilepath = '/SAN/inm/FDG/amoINSERT/Week_1/20190306/Flood/';
    
  %   Ufilename = '5ml1Mbq_Tc99m_flood_Tm10_hv35_gain12_th30_all_2min_00.data';
-    [ enwind ] = EnergyRange(Ufilename,Ufilepath,1);
+    [ enwind ] = EnergyRange(Ufilename,Ufilepath,1,killchnl);
     disp('EW found from U data');
 elseif exist('EW','var') == 1
         load(EW,'enwind'); 
