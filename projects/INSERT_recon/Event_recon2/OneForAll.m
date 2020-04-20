@@ -66,6 +66,9 @@ n_chan = 72;
 [Datasize] = MS_getfilesize(filename,filepath,num_events);
 
 AllData = cell(Datasize-1,20);
+AllFrame = cell(1,20);
+X_rec = cell(1,20);
+Y_rec = cell(1,20);
 
 for ii = 1:Datasize - 1
     %load function
@@ -367,6 +370,8 @@ rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
 %             nrm = ones(size(Frame,1),1) * ch1;
 %             Frame = Frame ./ nrm;
 %         end
+%%  DOI calculation 
+
         
         %% STATISTICAL METHOD RECONSTRUCTION
         
@@ -425,9 +430,12 @@ rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
         % Reconstructed event positions (X,Y), energy, reconstruction error are
         % stored in the 'output' structured variable. This one is saved in
         % Database_Reconstructions folder
-        
         AllData{ii,jj} = output;
-        
+        if ii == 1
+            AllFrame{ii,jj} = Frame;
+            X_rec{ii,jj} =  output.x_rec;
+            Y_rec{ii,jj} =  output.y_rec;
+        end
     end
 % <<<<<<< Updated upstream
 %             rmpath(strcat(pwd,'\Geometries'));
@@ -461,15 +469,18 @@ end
 % save(output_savepath, 'output');
 chunkData = zeros(258,506,Datasize-1);
 NodeData = zeros(258,506,num_nodes);
+
 for k = 1:num_nodes
     for kk = 1:Datasize-1
         chunkData(:,:,kk) = AllData{kk,k}.Statistical_Counts;
+       
     end
     NodeData(:,:,k) = sum(chunkData,3);
+    
     chunkData = zeros(258,506,Datasize-1);
 end
 output_savepath = strcat(pwd,'/Database_Reconstructions/Full_Rec_',outname,filename(1:end-5),'.mat');
-save(output_savepath,'NodeData','enwind');
+save(output_savepath,'NodeData','enwind','AllFrame','X_rec','Y_rec','-v7.3');
 disp('Saved!');
 
 end
