@@ -264,7 +264,7 @@ rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
         x_peak=round(fitting.b1);
 %         figure, plot(d,c,'xb');
 %         figure, plot(b,a,'xr');
-        en_window_perc_width=0.15;
+        en_window_perc_width=0.18;
         % Select the energy range for data energy windowing for image filtering)
         %-energy windowing
         E_min=round((1-en_window_perc_width).*x_peak);
