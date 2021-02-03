@@ -1,4 +1,4 @@
-function [ NodeData, AllData ] = OneForAll(filepath,filename,uflag,Ufilepath,Ufilename,EW,normflag,killchnl, outname)
+function [ NodeData, AllData ] = OneForAll(filepath,filename,uflag,Ufilepath,Ufilename,normflag,killchnl, outname,EW)
 % filepath: data file folder
 % filename: data file name
 % uflag: use flood spectra
@@ -17,7 +17,7 @@ if uflag
     %   Ufilename = '5ml1Mbq_Tc99m_flood_Tm10_hv35_gain12_th30_all_2min_00.data';
     [ enwind ] = EnergyRange(Ufilename,Ufilepath,1,killchnl);
     disp('EW found from U data');
-elseif exist('EW','var') == 1
+elseif isempty('EW') == 1
     load(EW,'enwind');
     disp('Manual EW');
 else
@@ -440,7 +440,8 @@ for ii = 1:Datasize - 1
         %here mean and std are evaluated starting from the LUT, then the log likelihood is computed and the Z groups are assigned where the likelihood is max
         
 %        Spotfiles = dir(fullfile('/SAN/inm/INSERT/amoINSERT/DOI/HSR/','*Frame*'));
-        Spotfiles = dir(fullfile('C:\Users\Ashley\Google Drive\UNIWORK\UCL\PhD Year 2\DOI\HSR','*Frame*'));
+        %Spotfiles = dir(fullfile('C:\Users\Ashley\Google Drive\UNIWORK\UCL\PhD Year 2\DOI\HSR','*Frame*'));
+        Spotfiles = dir(fullfile('/media/ashley/My Passport/DOI/HSR/','*Frame*'));
         Spotfilename = strcat(Spotfiles(jj).folder,'/',Spotfiles(jj).name,'/SPOTs_fitting.mat');
         load(Spotfilename,'SPOTS_fitting');
         

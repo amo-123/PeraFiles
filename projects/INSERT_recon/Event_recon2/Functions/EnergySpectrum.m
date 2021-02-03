@@ -16,7 +16,7 @@ Energy = sum(Frame,2);
 %The histogram is plotted: on the x-axis the energy amplitude is expressed
 %in ADC-channels
 if depict 
-    figure
+    figure();
     plot(x,y,'LineWidth',2.5)
     axis([prctile(Energy,0.1) prctile(Energy,99.9) 0 1.1*max(y)])
     set(gca,'Fontsize',14,'Fontname','Arial','FontWeight','bold')
