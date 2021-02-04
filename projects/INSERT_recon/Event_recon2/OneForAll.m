@@ -1,4 +1,4 @@
-function [ NodeData, AllData ] = OneForAll(filepath,filename,uflag,Ufilepath,Ufilename,normflag,killchnl, outname,EW)
+function [ NodeData, AllData ] = OneForAll(filepath,filename,uflag,Ufilepath,Ufilename,EW,normflag,killchnl, outname,doiflag)
 % filepath: data file folder
 % filename: data file name
 % uflag: use flood spectra
@@ -17,7 +17,7 @@ if uflag
     %   Ufilename = '5ml1Mbq_Tc99m_flood_Tm10_hv35_gain12_th30_all_2min_00.data';
     [ enwind ] = EnergyRange(Ufilename,Ufilepath,1,killchnl);
     disp('EW found from U data');
-elseif isempty('EW') == 1
+elseif exist('EW','var') == 1
     load(EW,'enwind');
     disp('Manual EW');
 else
@@ -63,9 +63,14 @@ n_chan = 72;
 % filepath = 'E:\Week 2\20190313_part2\CylinderPhantom\';
 % filename = 'cylinder_50Mbq_Tc99m_Tm10_gain12_th30_hv35_2kill_06.data';
 
-%[Datasize] = MS_getfilesize(filename,filepath,num_events);
-Datasize = 2;
-AllData = cell(Datasize-1,20,4);
+%Datasize = 2;
+if doiflag
+    Datasize = 2;
+    AllData = cell(Datasize-1,20,4);
+else
+    [Datasize] = MS_getfilesize(filename,filepath,num_events);
+    AllData = cell(Datasize-1,20,4);
+end
 % AllFrame = cell(Datasize-1,20);
 % X_rec = cell(Datasize-1,20);
 % Y_rec = cell(Datasize-1,20);
@@ -99,8 +104,8 @@ for ii = 1:Datasize - 1
             FRAME_NODE{n,1}= [];
         end
     end
-    FRAME_NODE = FRAME_NODE(~cellfun('isempty',FRAME_NODE));
-    num_nodes=length(FRAME_NODE);
+    NumFrame_NODE = FRAME_NODE(~cellfun('isempty',FRAME_NODE));
+    num_nodes=length(NumFrame_NODE);
     
     %dispstrcat('Modality:',32,modality,32,'-> Number of Nodes:',32,num2str(num_nodes)))
     
@@ -156,7 +161,7 @@ for ii = 1:Datasize - 1
     % and M the number of detection channels. Such a dataset is created as 'Frame' variable by 'INSERT_reorder' script (his variable has to
     % be manually saved in 'Database' folder).
     
-    for jj = 16:num_nodes
+    for jj = n-num_nodes+1:n
         disp(strcat('Node #', num2str(jj),' Calculating...'));
         % file_name = '20170403_module9_Co57_gain15_th30_HV35e4_flood_02';
         
@@ -167,6 +172,7 @@ for ii = 1:Datasize - 1
         %             ii_chan = ( (mod(jj_chan,ny)>2) & (fix(jj_chan/ny)>5) );
         %             FRAME_NODE{13,1}(:,ii_chan) = 0;
         %         end
+        %% Kill channels 
         for kk = 1:n_chan
             if killchnl(jj,kk) == 1 || killchnl(jj,kk) == 2
                 FRAME_NODE{jj,1}(:,kk) = zeros(size(FRAME_NODE{jj,1}(:,kk)));
@@ -181,11 +187,9 @@ for ii = 1:Datasize - 1
         % folder.
         lrf_folder = './LRFs/';
         lrf_files = dir(fullfile(lrf_folder,'*.mat'));
-        if num_nodes == 1
-            LRFs_filename = lrf_files(n).name(1:end-4);
-        else
-            LRFs_filename = lrf_files(jj).name(1:end-4);
-        end
+
+        LRFs_filename = lrf_files(jj).name(1:end-4);
+
         
         %% BASELINE for MODIFIED CENTROID RECONSTRUCTION
         % Set the baseline value is subtracted to the signals of all the channels.
@@ -431,71 +435,78 @@ for ii = 1:Datasize - 1
         
         %%  DOI calculation
         %filtraggio spaziale del Frame
-        
-        n_eventi=size(Frame,1);
-        %number of groups
-        n_groups=4;
-        %% DOI Computation
-        
-        %here mean and std are evaluated starting from the LUT, then the log likelihood is computed and the Z groups are assigned where the likelihood is max
-        
-%        Spotfiles = dir(fullfile('/SAN/inm/INSERT/amoINSERT/DOI/HSR/','*Frame*'));
-        %Spotfiles = dir(fullfile('C:\Users\Ashley\Google Drive\UNIWORK\UCL\PhD Year 2\DOI\HSR','*Frame*'));
-        Spotfiles = dir(fullfile('/media/ashley/My Passport/DOI/HSR/','*Frame*'));
-        Spotfilename = strcat(Spotfiles(jj).folder,'/',Spotfiles(jj).name,'/SPOTs_fitting.mat');
-        load(Spotfilename,'SPOTS_fitting');
-        
-        media=cell(n_groups,1);
-        stdev=cell(n_groups,1);
-        log_L=zeros(n_eventi, n_groups);
-        Z_CLASS=zeros(n_eventi,1);
-        
-        for k=1:n_groups
-            disp(['Processing sigma and mean group ', num2str(k)])
-            for ch=1:n_chan
-                media{k}(:,ch)=feval(SPOTS_fitting{ch}.fitting_media{k},[output.x_rec', output.y_rec']);
-                stdev{k}(:,ch)= feval(SPOTS_fitting{ch}.fitting_stddev{k},[output.x_rec', output.y_rec']);
-            end
-        end
-        
-        % use LUT to avoid this fitting ^ 
-        
-        for idx=1:n_eventi
+        if doiflag
+            n_eventi=size(Frame,1);
+            %number of groups
+            n_groups=4;
+            %% DOI Computation
+            
+            %here mean and std are evaluated starting from the LUT, then the log likelihood is computed and the Z groups are assigned where the likelihood is max
+            
+            %        Spotfiles = dir(fullfile('/SAN/inm/INSERT/amoINSERT/DOI/HSR/','*Frame*'));
+            Spotfiles = dir(fullfile('/media/ashley/My Passport/DOI/HSR/','*Frame*'));
+            Spotfilename = strcat(Spotfiles(jj).folder,'/',Spotfiles(jj).name,'/SPOTs_fitting.mat');
+            load(Spotfilename,'SPOTS_fitting');
+            
+            media=cell(n_groups,1);
+            stdev=cell(n_groups,1);
+            log_L=zeros(n_eventi, n_groups);
+            Z_CLASS=zeros(n_eventi,1);
+            
             for k=1:n_groups
-                log_L(idx,k)=-sum(ones(size(stdev{k}(idx,:)))*log(sqrt(2*pi))+log(stdev{k}(idx,:))+((Frame(idx,:)-media{k}(idx, :)).^2)./(2*stdev{k}(idx,:).*stdev{k}(idx,:)));
+                disp(['Processing sigma and mean group ', num2str(k)])
+                parfor ch=1:n_chan
+                    medias(:,ch)=feval(SPOTS_fitting{ch}.fitting_media{k},[output.x_rec', output.y_rec']);
+                    stdevs(:,ch)= feval(SPOTS_fitting{ch}.fitting_stddev{k},[output.x_rec', output.y_rec']);
+                end
+                media{k} = medias;
+                stdev{k} = stdevs;
             end
-        end
-        
-        trovaM=@(vettore) find(vettore == max(vettore));
-        for idx=1:n_eventi
-            Z_CLASS(idx)=trovaM(log_L(idx,:));
-        end
-        % Split Frame into 4 layers
-        
-        %%
-        for k = 1:4
-            [MeshX,~] = meshgrid(Z_CLASS == k,1:72);
-            FraLay{k} = reshape(Frame(MeshX'),[],72);
-            Tune.Num_rec=size(FraLay{k},1);
-            %[output.x_rec,output.y_rec,output.energy,output.error,Filt] = StatisticalMethod(FraLay{k},Par,Tune,Filt );
- 
-            outputLay.energy = output.energy(Z_CLASS == k); 
-            outputLay.x_rec_CM = output.x_rec_CM(Z_CLASS == k);
-            outputLay.y_rec_CM = output.y_rec_CM(Z_CLASS == k);
-            outputLay.x_rec = output.x_rec(Z_CLASS == k);
-            outputLay.y_rec = output.y_rec(Z_CLASS == k);
-            outputLay.error = output.error(Z_CLASS == k);
-            Par.pixel = 0.2;%mm
+            
+            % use LUT to avoid this fitting ^
+            
+            for idx=1:n_eventi
+                for k=1:n_groups
+                    log_L(idx,k)=-sum(ones(size(stdev{k}(idx,:)))*log(sqrt(2*pi))+log(stdev{k}(idx,:))+((Frame(idx,:)-media{k}(idx, :)).^2)./(2*stdev{k}(idx,:).*stdev{k}(idx,:)));
+                end
+            end
+            
+            trovaM=@(vettore) find(vettore == max(vettore));
+            for idx=1:n_eventi
+                Z_CLASS(idx)=trovaM(log_L(idx,:));
+            end
+            % Split Frame into 4 layers
+            
+            %%
+            for k = 1:4
+                [MeshX,~] = meshgrid(Z_CLASS == k,1:72);
+                FraLay{k} = reshape(Frame(MeshX'),[],72);
+                Tune.Num_rec=size(FraLay{k},1);
+                %[output.x_rec,output.y_rec,output.energy,output.error,Filt] = StatisticalMethod(FraLay{k},Par,Tune,Filt );
+                
+                outputLay.energy = output.energy(Z_CLASS == k);
+                outputLay.x_rec_CM = output.x_rec_CM(Z_CLASS == k);
+                outputLay.y_rec_CM = output.y_rec_CM(Z_CLASS == k);
+                outputLay.x_rec = output.x_rec(Z_CLASS == k);
+                outputLay.y_rec = output.y_rec(Z_CLASS == k);
+                outputLay.error = output.error(Z_CLASS == k);
+                Par.pixel = 0.2;%mm
+                disp('ML Recon');
+                [output.Statistical_Counts]=DisplayReconstruction(outputLay,Par,Filt,Tune,0,0);
+                
+                
+                %% SAVE RECONSTRUCTION
+                % Reconstructed event positions (X,Y), energy, reconstruction error are
+                % stored in the 'output' structured variable. This one is saved in
+                % Database_Reconstructions folder
+                AllData{ii,jj,k} = output;
+            end
+        else
             disp('ML Recon');
-            [output.Statistical_Counts]=DisplayReconstruction(outputLay,Par,Filt,Tune,0,0);
-            
-            
-            %% SAVE RECONSTRUCTION
-            % Reconstructed event positions (X,Y), energy, reconstruction error are
-            % stored in the 'output' structured variable. This one is saved in
-            % Database_Reconstructions folder
-            AllData{ii,jj,k} = output;
+            [output.Statistical_Counts]=DisplayReconstruction(output,Par,Filt,Tune,0,0);
+            AllData{ii,jj} = output;
         end
+
         
         %         if ii == 1
 %                     AllFrame{ii,jj} = Frame;
@@ -534,24 +545,45 @@ end
 % output_savepath = strcat(pwd,'\Database_Reconstructions\Rec_',file_name,'.mat');
 % % Save reconstruction
 % save(output_savepath, 'output');
-chunkData = zeros(258,506,Datasize-1,4);
-NodeData = cell(num_nodes,4);
-for k = 1:4
-for i = 1:num_nodes
-    for j = 1:Datasize-1
-        chunkData(:,:,j,k) = AllData{j,i,k}.Statistical_Counts;
-        
-    end
-    NodeData{i,k} = sum(chunkData(:,:,:,k),3);
-    
+if doiflag
     chunkData = zeros(258,506,Datasize-1,4);
-end
-end
+    NodeData = cell(n,4);
+    for k = 1:4
+        for i = n-num_nodes+1:n
+            for j = 1:Datasize-1
+                chunkData(:,:,j,k) = AllData{j,i,k}.Statistical_Counts;
+                
+            end
+            NodeData{i,k} = sum(chunkData(:,:,:,k),3);
+            
+            chunkData = zeros(258,506,Datasize-1,4);
+        end
+        NodeData(~cellfun('isempty',NodeData));
+    end
 
-output_savepath = strcat(pwd,'/Database_Reconstructions/Full_Rec',outname,filename(1:end-5),'.mat');
-%save(output_savepath,'NodeData','enwind','AllFrame', 'X_rec','Y_rec','Z_rec','-v7.3');
-save(output_savepath,'NodeData','enwind','-v7.3');
-disp('Saved!');
+    output_savepath = strcat(pwd,'/Database_Reconstructions/DOI_Rec',outname,filename(1:end-5),'.mat');
+    %save(output_savepath,'NodeData','enwind','AllFrame', 'X_rec','Y_rec','Z_rec','-v7.3');
+    save(output_savepath,'NodeData','enwind','-v7.3');
+    disp('Saved!');
+else
+    chunkData = zeros(258,506,Datasize-1);
+    NodeData = zeros(258,506,n);
+    
+    for k = n-num_nodes+1:n
+        for kk = 1:Datasize-1
+            chunkData(:,:,kk) = AllData{kk,k}.Statistical_Counts;
+            
+        end
+        NodeData(:,:,k) = sum(chunkData,3);
+        
+        chunkData = zeros(258,506,Datasize-1);
+    end
+    NodeData = NodeData(:,:,all(NodeData, [1 2]));
+    
+    output_savepath = strcat(pwd,'/Database_Reconstructions/Full_Rec_',outname,filename(1:end-5),'.mat');
+    save(output_savepath,'NodeData','enwind','-v7.3');
+    disp('Saved!');
+end
 
 end
 
