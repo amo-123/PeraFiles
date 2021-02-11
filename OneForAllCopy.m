@@ -17,9 +17,9 @@ if uflag
     %   Ufilename = '5ml1Mbq_Tc99m_flood_Tm10_hv35_gain12_th30_all_2min_00.data';
     [ enwind ] = EnergyRange(Ufilename,Ufilepath,1,killchnl);
     disp('EW found from U data');
-elseif exist('EW','var') == 1
-    load(EW,'enwind');
-    disp('Manual EW');
+%elseif exist('EW','var') == 1
+%   load(EW,'enwind');
+%  disp('Manual EW');
 else
     %load('EnergyWindows.mat','enwind');
     %load('/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/EnergyWindows/Cylinder_02_EW.mat','enwind');
@@ -63,8 +63,8 @@ n_chan = 72;
 % filepath = 'E:\Week 2\20190313_part2\CylinderPhantom\';
 % filename = 'cylinder_50Mbq_Tc99m_Tm10_gain12_th30_hv35_2kill_06.data';
 
-%[Datasize] = MS_getfilesize(filename,filepath,num_events);
-Datasize = 2;
+[Datasize] = MS_getfilesize(filename,filepath,num_events);
+
 AllData = cell(Datasize-1,20,4);
 % AllFrame = cell(Datasize-1,20);
 % X_rec = cell(Datasize-1,20);
@@ -440,7 +440,6 @@ for ii = 1:Datasize - 1
         %here mean and std are evaluated starting from the LUT, then the log likelihood is computed and the Z groups are assigned where the likelihood is max
         
         Spotfiles = dir(fullfile('/SAN/inm/INSERT/amoINSERT/DOI/HSR/','*Frame*'));
-%        Spotfiles = dir(fullfile('/media/ashley/My Passport/DOI/HSR/','*Frame*'));
         Spotfilename = strcat(Spotfiles(jj).folder,'/',Spotfiles(jj).name,'/SPOTs_fitting.mat');
         load(Spotfilename,'SPOTS_fitting');
         
@@ -456,8 +455,6 @@ for ii = 1:Datasize - 1
                 stdev{k}(:,ch)= feval(SPOTS_fitting{ch}.fitting_stddev{k},[output.x_rec', output.y_rec']);
             end
         end
-        
-        % use LUT to avoid this fitting ^ 
         
         for idx=1:n_eventi
             for k=1:n_groups
@@ -553,3 +550,5 @@ save(output_savepath,'NodeData','enwind','-v7.3');
 disp('Saved!');
 
 end
+
+

@@ -10,15 +10,19 @@ tic;
 files = dir(fullfile(folder,'*.data'));
 % FilterSpec = '*.data';
 
-Ufiles = dir(fullfile(Ufolder,'*.data'));
-Ufile = Ufiles(1).name
+if uflag
+    Ufiles = dir(fullfile(Ufolder,'*.data'));
+    Ufile = Ufiles(1).name;
+    Ufolder = [Ufolder,'/'];
+end
+
 
 for i = 1:length(files)
 
 filename = files(i).name;
 filepath = [files(i).folder,'/'];
 
-[ NodeData, AllData ] = OneForAll(filepath, filename, 0, uflag, Ufolder, Ufile, EW, outname);
+[ NodeData, AllData ] = OneForAll(filepath, filename, 0, uflag, Ufolder, Ufile, EW, 1, outname);
 
 end
 toc;

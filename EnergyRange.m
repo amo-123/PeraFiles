@@ -1,4 +1,4 @@
-function [ enwind ] = EnergyRange(filename,filepath,L_msk)
+function [ enwind ] = EnergyRange(filename,filepath,L_msk,killchnl)
 
 %% Main to Split Nodes
 %Code to load .data files (INSERT files) and split the acquisitions from different nodes into FRAME_NODES variable
@@ -21,7 +21,7 @@ addpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
 
 %determine if the user wants to open only the last num_events
 num_events=5000000; %number of events to display (comment this line to see all the events)
-
+n_chan = 72;
 %% Load
 
 % FilterSpec = '*.data';
@@ -54,7 +54,7 @@ num_events=5000000; %number of events to display (comment this line to see all t
 %     [~,ic1] = max( Frame, [], 2 ); 
 %     Frame = Frame( ic1>6, : );
 
-    for n = 1:num_nodes
+    for n=1:num_nodes
         try
         FRAME_NODE{n,1}=Frame(Node==n,:);
         catch 
@@ -204,6 +204,14 @@ rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
         
         % load dataset
         % Frame = CalibrationDatasetLoad(file_name);
+        % kill mask for each channel 
+        for kk = 1:n_chan
+            if killchnl(jj,kk) == 1 || killchnl(jj,kk) == 2
+                FRAME_NODE{jj,1}(:,kk) = zeros(size(FRAME_NODE{jj,1}(:,kk)));
+                disp(strcat('Node #', num2str(jj),' Channel #', num2str(kk), ' Killed.'));
+            end
+        end
+        
         Frame = FRAME_NODE{jj};
         
         [~,ic1] = max( Frame, [], 2 );
@@ -250,13 +258,13 @@ rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
             output.energy1(output.energy1 < (pmod+0.1*pmod))];
         
         [c,d] = hist(energyWindowed,floor(sqrt(size(Frame,1))));
-        [a,b] = hist(energyWindowed,floor(sqrt(size(Frame_sub,1))));
+        [~,~] = hist(energyWindowed,floor(sqrt(size(Frame_sub,1))));
         
         fitting=GaussFit(d,c,pmod);
         x_peak=round(fitting.b1);
 %         figure, plot(d,c,'xb');
 %         figure, plot(b,a,'xr');
-        en_window_perc_width=0.15;
+        en_window_perc_width=0.18;
         % Select the energy range for data energy windowing for image filtering)
         %-energy windowing
         E_min=round((1-en_window_perc_width).*x_peak);
@@ -265,5 +273,5 @@ rmpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
     enwind(jj,:) = [E_min,E_max];
         
     end
+end
    
-

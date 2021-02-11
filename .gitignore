@@ -4,6 +4,7 @@
 *.asv
 *.o*
 *log*
+*.sh
 
 html/
 
@@ -16,3 +17,5 @@ Functions/Inpaint_nans/
 /Models_and_Corrections/*
 
 /LRFs/*
+
+/bashscript
