@@ -8,10 +8,10 @@ clc
 if ~exist('current_path', 'var')
     current_path = pwd;
 end
-current_path=strcat(current_path,'\');
+current_path=strcat(current_path,'/');
 addpath('Functions');
 addpath('Geometries');
-addpath(strcat('Functions\.data Functions'));
+addpath(strcat('Functions/dataFunctions'));
 
 %% Initializations
 
@@ -28,7 +28,7 @@ for i = 1:length(files)
 % [filename,filepath] = uigetfile([pwd,'\',FilterSpec], 'Select .data file', 'MultiSelect', 'off');
 
 filename = files(i).name;
-filepath = [files(i).folder,'\'];
+filepath = [files(i).folder,'/'];
 %load function
 if exist('num_events','var')
    [Frame,Node,Time_stamp,modality]=openDataFile(filename,filepath,num_events);
@@ -83,3 +83,4 @@ end
 %save(fn, 'Frame');
 
 end
+

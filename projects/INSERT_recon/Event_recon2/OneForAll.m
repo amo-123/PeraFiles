@@ -8,23 +8,13 @@ function [ NodeData, AllData ] = OneForAll(filepath,filename,uflag,Ufilepath,Ufi
 % killchnl: matrix of pk targets
 % outname: unique file identifier for output
 
-% FilterSpec = '*.data';
-
-%[Ufilename,Ufilepath] = uigetfile([pwd,'\',FilterSpec], 'Select .data file', 'MultiSelect', 'off');
 if uflag
-    %   Ufilepath = '/SAN/inm/FDG/amoINSERT/Week_1/20190306/Flood/';
-    
-    %   Ufilename = '5ml1Mbq_Tc99m_flood_Tm10_hv35_gain12_th30_all_2min_00.data';
     [ enwind ] = EnergyRange(Ufilename,Ufilepath,1,killchnl);
     disp('EW found from U data');
 elseif exist('EW','var') == 1
     load(EW,'enwind');
     disp('Manual EW');
 else
-    %load('EnergyWindows.mat','enwind');
-    %load('/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/EnergyWindows/Cylinder_02_EW.mat','enwind');
-    %load('/SAN/inm/FDG/amoINSERT/INSERT/PeraFiles/PeraFiles/EnergyWindows/EW_Hoffman2D.mat','enwind');
-    %   load(EW,'enwind');
     [ enwind ] = EnergyRange(filename,filepath,1,killchnl);
     disp('EW found from data');
 end
@@ -32,19 +22,6 @@ end
 %% Main to Split Nodes
 %Code to load .data files (INSERT files) and split the acquisitions from different nodes into FRAME_NODES variable
 
-% close all
-% clear all
-% clc
-
-% if ~exist('current_path', 'var')
-%     current_path = pwd;
-% end
-% current_path=strcat(current_path,'\');
-% <<<<<<< Updated upstream
-% addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split');
-% addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions');
-% addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Geometries');
-% addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions\dataFunctions');
 % =======
 addpath(strcat(pwd,'/MATLAB_modified_Main_Split'));
 addpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions'));
@@ -59,22 +36,14 @@ num_events=5000000; %number of events to display (comment this line to see all t
 n_chan = 72;
 %% Load
 
-%[filename,filepath] = uigetfile([pwd,'\',FilterSpec], 'Select .data file', 'MultiSelect', 'off');
-% filepath = 'E:\Week 2\20190313_part2\CylinderPhantom\';
-% filename = 'cylinder_50Mbq_Tc99m_Tm10_gain12_th30_hv35_2kill_06.data';
-
-%Datasize = 2;
-if doiflag
+if doiflag == 1
     Datasize = 2;
     AllData = cell(Datasize-1,20,4);
 else
     [Datasize] = MS_getfilesize(filename,filepath,num_events);
-    AllData = cell(Datasize-1,20,4);
+    AllData = cell(Datasize-1,20);
 end
-% AllFrame = cell(Datasize-1,20);
-% X_rec = cell(Datasize-1,20);
-% Y_rec = cell(Datasize-1,20);
-% Z_rec = cell(Datasize-1,20);
+
 FraLay = cell(1,4);
 
 for ii = 1:Datasize - 1
@@ -435,7 +404,7 @@ for ii = 1:Datasize - 1
         
         %%  DOI calculation
         %filtraggio spaziale del Frame
-        if doiflag
+        if doiflag == 1
             n_eventi=size(Frame,1);
             %number of groups
             n_groups=4;
@@ -508,22 +477,10 @@ for ii = 1:Datasize - 1
         end
 
         
-        %         if ii == 1
-%                     AllFrame{ii,jj} = Frame;
-%                     X_rec{ii,jj} =  output.x_rec;
-%                     Y_rec{ii,jj} =  output.y_rec;
-%                     Z_rec{ii,jj} =  Z_CLASS;
-        %         end
+
     end
     % <<<<<<< Updated upstream
-    %             rmpath(strcat(pwd,'\Geometries'));
-    %         rmpath(strcat(pwd,'\Functions'));
-    %         rmpath(strcat(pwd,'\Database'));
-    %
-    %     addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split');
-    % addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions');
-    % addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Geometries');
-    % addpath('E:\TestLRF\PERA_PlanarReconstructionAlgorithm\PeraScripts\MATLAB_modified_Main_Split\Functions\dataFunctions');
+
     % =======
     rmpath(strcat(pwd,'/Geometries'));
     rmpath(strcat(pwd,'/Functions'));
@@ -537,15 +494,9 @@ for ii = 1:Datasize - 1
     
 end
 
-% output_savepath = strcat(pwd,'\Database_Reconstructions\All_nodes_',filename(1:end-5),'.mat');
-% save(output_savepath,'AllData')
+%% Save reconstruction
 
-
-% Reconstruction savepath
-% output_savepath = strcat(pwd,'\Database_Reconstructions\Rec_',file_name,'.mat');
-% % Save reconstruction
-% save(output_savepath, 'output');
-if doiflag
+if doiflag == 1
     chunkData = zeros(258,506,Datasize-1,4);
     NodeData = cell(n,4);
     for k = 1:4
@@ -558,27 +509,31 @@ if doiflag
             
             chunkData = zeros(258,506,Datasize-1,4);
         end
-        NodeData(~cellfun('isempty',NodeData));
+        NodeData = NodeData(~cellfun('isempty',NodeData));
     end
 
     output_savepath = strcat(pwd,'/Database_Reconstructions/DOI_Rec',outname,filename(1:end-5),'.mat');
-    %save(output_savepath,'NodeData','enwind','AllFrame', 'X_rec','Y_rec','Z_rec','-v7.3');
+   
     save(output_savepath,'NodeData','enwind','-v7.3');
     disp('Saved!');
 else
     chunkData = zeros(258,506,Datasize-1);
-    NodeData = zeros(258,506,n);
+    NodeData = cell(n,1);
     
     for k = n-num_nodes+1:n
         for kk = 1:Datasize-1
-            chunkData(:,:,kk) = AllData{kk,k}.Statistical_Counts;
-            
+            if ~isempty(AllData{kk,k}) == 1
+                chunkData(:,:,kk) = AllData{kk,k}.Statistical_Counts;
+            else
+                chunkData(:,:,kk) = chunkData(:,:,kk);
+            end
         end
-        NodeData(:,:,k) = sum(chunkData,3);
+        NodeData{k} = sum(chunkData,3);
         
         chunkData = zeros(258,506,Datasize-1);
     end
-    NodeData = NodeData(:,:,all(NodeData, [1 2]));
+    
+    NodeData = NodeData(~cellfun('isempty',NodeData));
     
     output_savepath = strcat(pwd,'/Database_Reconstructions/Full_Rec_',outname,filename(1:end-5),'.mat');
     save(output_savepath,'NodeData','enwind','-v7.3');
