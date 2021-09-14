@@ -1,4 +1,4 @@
-function [ NodeData, AllData ] = OneForAll(filepath,filename,uflag,Ufilepath,Ufilename,EW,normflag,killchnl, outname,doiflag)
+function [ NodeData, AllData ] = OneForAll(filepath,filename,EW,normflag,outname,doiflag)
 % filepath: data file folder
 % filename: data file name
 % uflag: use flood spectra
@@ -8,16 +8,9 @@ function [ NodeData, AllData ] = OneForAll(filepath,filename,uflag,Ufilepath,Ufi
 % killchnl: matrix of pk targets
 % outname: unique file identifier for output
 
-if uflag
-    [ enwind ] = EnergyRange(Ufilename,Ufilepath,1,killchnl);
-    disp('EW found from U data');
-elseif exist('EW','var') == 1
     load(EW,'enwind');
     disp('Manual EW');
-else
-    [ enwind ] = EnergyRange(filename,filepath,1,killchnl);
-    disp('EW found from data');
-end
+
 
 %% Main to Split Nodes
 %Code to load .data files (INSERT files) and split the acquisitions from different nodes into FRAME_NODES variable
@@ -37,8 +30,9 @@ n_chan = 72;
 %% Load
 
 if doiflag == 1
-    Datasize = 2;
+    [Datasize] = MS_getfilesize(filename,filepath,num_events);
     AllData = cell(Datasize-1,20,4);
+    disp('DOI Recon');
 else
     [Datasize] = MS_getfilesize(filename,filepath,num_events);
     AllData = cell(Datasize-1,20);
@@ -75,22 +69,6 @@ for ii = 1:Datasize - 1
     end
     NumFrame_NODE = FRAME_NODE(~cellfun('isempty',FRAME_NODE));
     num_nodes=length(NumFrame_NODE);
-    
-    %dispstrcat('Modality:',32,modality,32,'-> Number of Nodes:',32,num2str(num_nodes)))
-    
-    %% Check number of events x node
-    
-    % for n=1:num_nodes
-    %     Events_counts(n)=length(FRAME_NODE{n,1});
-    % end
-    % figure
-    % plot(1:1:num_nodes,Events_counts,'-o','linewidth',2)
-    % xlabel('#node')
-    % ylabel('#events')
-    % set(gca,'fontsize',15,'fontweight','bold')
-    % grid on
-    
-    % Tot_events=sum(Events_counts);
     
     %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%  MLEM  %%%%%%%%%%%%%%%%%%%%%%%%%%
     
@@ -129,36 +107,20 @@ for ii = 1:Datasize - 1
     % Set here the name of the DATASET to be reconstructed. The dataset should be organized in a N x M matrix, where N is the number of events
     % and M the number of detection channels. Such a dataset is created as 'Frame' variable by 'INSERT_reorder' script (his variable has to
     % be manually saved in 'Database' folder).
-    
+
     for jj = n-num_nodes+1:n
+            clear('output');
         disp(strcat('Node #', num2str(jj),' Calculating...'));
-        % file_name = '20170403_module9_Co57_gain15_th30_HV35e4_flood_02';
-        
-        %         if length(FRAME_NODE) >= 13 %19
-        %             %FRAME_NODE{19,1}(:,14) = 0;
-        %             n_chan = 72;  ny = 6; % nz = 12;
-        %             jj_chan = (0:n_chan-1);
-        %             ii_chan = ( (mod(jj_chan,ny)>2) & (fix(jj_chan/ny)>5) );
-        %             FRAME_NODE{13,1}(:,ii_chan) = 0;
-        %         end
-        %% Kill channels 
-        for kk = 1:n_chan
-            if killchnl(jj,kk) == 1 || killchnl(jj,kk) == 2
-                FRAME_NODE{jj,1}(:,kk) = zeros(size(FRAME_NODE{jj,1}(:,kk)));
-                disp(strcat('Node #', num2str(jj),' Channel #', num2str(kk), ' Killed.'));
-            end
-        end
-        
-        
+
         %% LRFs for STATISTICAL RECONSTRUCTION
         % Set here the name of the file containing the LRFs (optical model) produced by 'LRF_estimation' script for the considered module.
         % The LRFs file is automatically saved by 'LRFs_estimation' in "LRFs"
         % folder.
         lrf_folder = './LRFs/';
         lrf_files = dir(fullfile(lrf_folder,'*.mat'));
-
+        
         LRFs_filename = lrf_files(jj).name(1:end-4);
-
+        
         
         %% BASELINE for MODIFIED CENTROID RECONSTRUCTION
         % Set the baseline value is subtracted to the signals of all the channels.
@@ -166,7 +128,7 @@ for ii = 1:Datasize - 1
         % Centroid Method: the baseline value should be set so that reconstructed events cover the whole FOV.
         % Typical values: from 400 to 600 ADC_channels.
         
-        baseline = 600; % ADC_channels
+        baseline = 400; % ADC_channels
         
         %% ENERGY CALIBRATION/RESOLUTION SETTING
         % Set 'En_resolution' to:
@@ -239,8 +201,9 @@ for ii = 1:Datasize - 1
         
         % load dataset
         % Frame = CalibrationDatasetLoad(file_name);
+%         for jj = 1:20
         Frame = FRAME_NODE{jj};
-        
+
         %% ENERGY SPECTRUM
         % the EnergySpectrum function calculates the output energy (sum of the
         % signal from all channels) and plots the signal spectrum (uncalibrated energy spectrum
@@ -251,49 +214,38 @@ for ii = 1:Datasize - 1
         %disp('Select energy values related to events to be reconstructed by the statistical method:')
         %disp('place the pointer on the lower limit of the range and click. Repeat the same for the upper limit.')
         
-        %%
-        %         % Auto Peak
-        %         pmod = mode(output.energy1);
-        %         energyWindowed = [output.energy1(output.energy1 > (pmod-0.1*pmod));...
-        %             output.energy1(output.energy1 < (pmod+0.1*pmod))];
-        %
-        %         [c,d] = hist(energyWindowed,floor(sqrt(size(Frame,1))));
-        %
-        %         fitting=GaussFit(d,c,pmod);
-        %         x_peak=round(fitting.b1);
-        %         %figure, plot(d,c,'xb');
-        %
-        %         en_window_perc_width=0.05;
-        %         % Select the energy range for data energy windowing for image filtering)
-        %         %-energy windowing
-        %         Filt.E_min=round((1-en_window_perc_width).*x_peak);
-        %         Filt.E_max=round((1+en_window_perc_width).*x_peak);
+       
         Filt.E_min = enwind(jj,1);
         Filt.E_max = enwind(jj,2);
         
-        %% Maual Peak
-        % [px,py]=ginput(2);
-        % close all
-        % clc
-        % % Select the energy range for data energy windowing for image filtering)
-        % Filt.E_min= min(px);%channels
-        % Filt.E_max= max(px);%channels
         
-        %% Normalise Channel Events
+        %% Filter Channel Events
+        [~,ic1] = max( Frame, [], 2 ); % Kill bright band phantoms 
+        Frame = Frame( (ic1>6), : ); % Events in which the highest value is in channel 1 to 6 are removed.
+       
+        
         disp('Channel Normalisation');
-        if normflag == 1
-            ch = sum(Frame);
-            ch1 = ones(1,n_chan);
-            if ( max(ch) > 0 )
-                ii_chan = ( ch > 0 );
-                ch1(ii_chan) = ch(ii_chan) / mean( ch(ii_chan) );
-            end
-            
-            
-            nrm = ones(size(Frame,1),1) * ch1;
-            Frame = Frame ./ nrm;
+        if exist('normflag','var') == 1
+            load(normflag,'nrm');
+            disp('Unifrom Normalisation');
+            NF = ones(size(Frame,1),1) * nrm(jj,:);
+
+            Frame = Frame ./ NF;
         end
+
+        % Bad Event filter 
+        if length(Frame) > 72
+        B = sort(Frame,2);
+        Diff = B(:,end) - B(:, end - 1) < mean(B(:,end) - B(:, end - 1))*2.8;
+        Frame = Frame(Diff,:);
         
+        M = mean(Frame(Frame>=30)); % Kill channel 
+        cut = 1.6;
+        Mi = mean(Frame) >= M/cut & mean(Frame) <= M*cut;
+       
+        Frame = Frame.*Mi;
+        else
+        end
         
         
         %% CENTROID RECONSTRUCTION
@@ -312,185 +264,175 @@ for ii = 1:Datasize - 1
         % dataset.
         Frame_init = Frame;
         Frame = Frame_init(Filt.energy_window,:);
-        
-        
-        %% LOAD LRFs (Optical Model)
-        
-        % Loading and sampling of the analytical selected LRF
-        load(strcat(pwd,'/LRFs/', LRFs_filename,'.mat'),'LRFs');
-        disp(strcat('Loading LRF -',LRFs_filename));
-        
-        for kk = 1:n_chan
-            if killchnl(jj,kk) == 2
-                LRFs{kk}.a = 0.02;
-                LRFs{kk}.b = 16;
-                LRFs{kk}.c = 16;
-                disp(strcat('LRF Node #', num2str(jj),' Channel #', num2str(kk), ' Killed.'));
-            end
-        end
-        
-        [Par.LRF] = LRF_Load(size(Frame,2),LRFs,Par);
-        
-        
-        
-        %         if normflag == 1
-        %             ch = sum(Frame);
-        %             ch1 = ones(1,n_chan);
-        %             if ( max(ch) > 0 )
-        %                 ii_chan = ( ch > 0 );
-        %                 ch1(ii_chan) = ch(ii_chan) / mean( ch(ii_chan) );
-        %             end
-        %
-        %
-        %             nrm = ones(size(Frame,1),1) * ch1;
-        %             Frame = Frame ./ nrm;
-        %         end
-        
-        
-        %% STATISTICAL METHOD RECONSTRUCTION
-        
-        %overwrite Tune.Num_rec variable in order to process all the events instead
-        %of a subset
-        Tune.Num_rec=size(Frame,1);
-        
-        % Employment of the statistical method: it is used to reconstruct the
-        % coordinates of the filtered events (according to the Energy filter)
-        
-        
-        [output.x_rec,output.y_rec,output.energy,output.error,Filt] = StatisticalMethod(Frame,Par,Tune,Filt );
-        
-        
-        %% HISTOGRAM of the RECONSTRUCTION ERROR of STATISTICAL RECONSTRUCTION
-        %         figure
-        %         hold on
-        %         set(gca,'Fontsize',14,'Fontname','Arial','FontWeight','bold')
-        %         title('Reconstruction error (Statistical Method)','Fontname','Arial','FontWeight','bold')
-        %         hist(output.error,100);
-        
-        
-        %% DISPLAY STATISTICAL RECONSTRUCTION
-        % 2D histogram of the reconstructed positions (XY)
-        
-        Par.pixel = 0.2;%mm
-        disp('ML Recon');
-        %[output.Statistical_Counts]=DisplayReconstruction(output,Par,Filt,Tune,0,0);
-        %         hold on
-        %         set(gca,'Fontsize',14,'Fontname','Arial','FontWeight','bold')
-        %         title('Statistical Reconstruction','Fontname','Arial','FontWeight','bold')
-        
-        
-        %% RECONSTRUCTED ENERGY HISTOGRAM, ENERGY CALIBRATION and RESOLUTION
-        %         energy_max = 1.5e+5;%ADC channels; valore al quale si vuole venga tagliato il plot dello spettro di energia
-        %
-        %         if En_resolution == 1
-        %             %Energy peaks for spectrum calibration (these values have to be set in
-        %             %order to compute energy resolution)
-        %             %disp'>>> ENERGY CALIBRATION AND RESOLUTION <<<')
-        %             Filt.E_calibration_min = input('Energy of lower energy peak [keV]: ');%keV
-        %             Filt.E_calibration_max =  input('Energy of higher energy peak [keV]: '); %keV
-        %             clc
-        %
-        %         end
-        
-        %         [Energy_Resolution, fitresult_energy_calibration, ~] = Reconstructed_Energy(output,energy_max,Filt,0,1,En_resolution);
-        %
-        %         if En_resolution == 1
-        %             calibration_line = coeffvalues(fitresult_energy_calibration);
-        %
-        %             %dispstrcat('Energy calibration line is: Energy[keV] = ', num2str(calibration_line(1)),' * Energy[ADC_channels] + (', num2str(calibration_line(2)), ')'))
-        %             %dispstrcat('Energy resolution (FWHM of reconstructed energy spectrum) is: ', num2str(Energy_Resolution), '%'))
-        %
-        %         end
-        
-        %%  DOI calculation
-        %filtraggio spaziale del Frame
-        if doiflag == 1
-            n_eventi=size(Frame,1);
-            %number of groups
-            n_groups=4;
-            %% DOI Computation
+       
+            %% LOAD LRFs (Optical Model)
             
-            %here mean and std are evaluated starting from the LUT, then the log likelihood is computed and the Z groups are assigned where the likelihood is max
+            % Loading and sampling of the analytical selected LRF
+            load(strcat(pwd,'/LRFs/', LRFs_filename,'.mat'),'LRFs');
+            disp(strcat('Loading LRF -',LRFs_filename));
             
-            %        Spotfiles = dir(fullfile('/SAN/inm/INSERT/amoINSERT/DOI/HSR/','*Frame*'));
-            Spotfiles = dir(fullfile('/media/ashley/My Passport/DOI/HSR/','*Frame*'));
-            Spotfilename = strcat(Spotfiles(jj).folder,'/',Spotfiles(jj).name,'/SPOTs_fitting.mat');
-            load(Spotfilename,'SPOTS_fitting');
             
-            media=cell(n_groups,1);
-            stdev=cell(n_groups,1);
-            log_L=zeros(n_eventi, n_groups);
-            Z_CLASS=zeros(n_eventi,1);
-            
-            for k=1:n_groups
-                disp(['Processing sigma and mean group ', num2str(k)])
-                parfor ch=1:n_chan
-                    medias(:,ch)=feval(SPOTS_fitting{ch}.fitting_media{k},[output.x_rec', output.y_rec']);
-                    stdevs(:,ch)= feval(SPOTS_fitting{ch}.fitting_stddev{k},[output.x_rec', output.y_rec']);
-                end
-                media{k} = medias;
-                stdev{k} = stdevs;
-            end
-            
-            % use LUT to avoid this fitting ^
-            
-            for idx=1:n_eventi
-                for k=1:n_groups
-                    log_L(idx,k)=-sum(ones(size(stdev{k}(idx,:)))*log(sqrt(2*pi))+log(stdev{k}(idx,:))+((Frame(idx,:)-media{k}(idx, :)).^2)./(2*stdev{k}(idx,:).*stdev{k}(idx,:)));
+
+       
+            for kk = 1:n_chan
+                if Mi(kk) == 0
+                    LRFs{kk}.a = 0.02;
+                    LRFs{kk}.b = 16;
+                    LRFs{kk}.c = 16;
+                    disp(strcat('LRF Node #', num2str(jj),' Channel #', num2str(kk), ' Killed.'));
                 end
             end
+        
             
-            trovaM=@(vettore) find(vettore == max(vettore));
-            for idx=1:n_eventi
-                Z_CLASS(idx)=trovaM(log_L(idx,:));
-            end
-            % Split Frame into 4 layers
             
-            %%
-            for k = 1:4
-                [MeshX,~] = meshgrid(Z_CLASS == k,1:72);
-                FraLay{k} = reshape(Frame(MeshX'),[],72);
-                Tune.Num_rec=size(FraLay{k},1);
-                %[output.x_rec,output.y_rec,output.energy,output.error,Filt] = StatisticalMethod(FraLay{k},Par,Tune,Filt );
-                
-                outputLay.energy = output.energy(Z_CLASS == k);
-                outputLay.x_rec_CM = output.x_rec_CM(Z_CLASS == k);
-                outputLay.y_rec_CM = output.y_rec_CM(Z_CLASS == k);
-                outputLay.x_rec = output.x_rec(Z_CLASS == k);
-                outputLay.y_rec = output.y_rec(Z_CLASS == k);
-                outputLay.error = output.error(Z_CLASS == k);
-                Par.pixel = 0.2;%mm
-                disp('ML Recon');
-                [output.Statistical_Counts]=DisplayReconstruction(outputLay,Par,Filt,Tune,0,0);
-                
-                
-                %% SAVE RECONSTRUCTION
-                % Reconstructed event positions (X,Y), energy, reconstruction error are
-                % stored in the 'output' structured variable. This one is saved in
-                % Database_Reconstructions folder
-                AllData{ii,jj,k} = output;
-            end
-        else
+            [Par.LRF] = LRF_Load(size(Frame,2),LRFs,Par);
+
+           
+            
+            
+            %% STATISTICAL METHOD RECONSTRUCTION
+            
+            %overwrite Tune.Num_rec variable in order to process all the events instead
+            %of a subset
+            Tune.Num_rec=size(Frame,1);
+            
+            % Employment of the statistical method: it is used to reconstruct the
+            % coordinates of the filtered events (according to the Energy filter)
+            
+            
+            [output.x_rec,output.y_rec,output.energy,output.error,Filt] = StatisticalMethod(Frame,Par,Tune,Filt );
+            
+            
+            %% HISTOGRAM of the RECONSTRUCTION ERROR of STATISTICAL RECONSTRUCTION
+            %         figure
+            %         hold on
+            %         set(gca,'Fontsize',14,'Fontname','Arial','FontWeight','bold')
+            %         title('Reconstruction error (Statistical Method)','Fontname','Arial','FontWeight','bold')
+            %         hist(output.error,100);
+            
+            
+            %% DISPLAY STATISTICAL RECONSTRUCTION
+            % 2D histogram of the reconstructed positions (XY)
+            
+            Par.pixel = 0.2;%mm
             disp('ML Recon');
-            [output.Statistical_Counts]=DisplayReconstruction(output,Par,Filt,Tune,0,0);
-            AllData{ii,jj} = output;
-        end
-
-        
-
+            %[output.Statistical_Counts]=DisplayReconstruction(output,Par,Filt,Tune,0,0);
+            %         hold on
+            %         set(gca,'Fontsize',14,'Fontname','Arial','FontWeight','bold')
+            %         title('Statistical Reconstruction','Fontname','Arial','FontWeight','bold')
+            
+            
+            %% RECONSTRUCTED ENERGY HISTOGRAM, ENERGY CALIBRATION and RESOLUTION
+            %         energy_max = 1.5e+5;%ADC channels; valore al quale si vuole venga tagliato il plot dello spettro di energia
+            %
+            %         if En_resolution == 1
+            %             %Energy peaks for spectrum calibration (these values have to be set in
+            %             %order to compute energy resolution)
+            %             %disp'>>> ENERGY CALIBRATION AND RESOLUTION <<<')
+            %             Filt.E_calibration_min = input('Energy of lower energy peak [keV]: ');%keV
+            %             Filt.E_calibration_max =  input('Energy of higher energy peak [keV]: '); %keV
+            %             clc
+            %
+            %         end
+            
+            %         [Energy_Resolution, fitresult_energy_calibration, ~] = Reconstructed_Energy(output,energy_max,Filt,0,1,En_resolution);
+            %
+            %         if En_resolution == 1
+            %             calibration_line = coeffvalues(fitresult_energy_calibration);
+            %
+            %             %dispstrcat('Energy calibration line is: Energy[keV] = ', num2str(calibration_line(1)),' * Energy[ADC_channels] + (', num2str(calibration_line(2)), ')'))
+            %             %dispstrcat('Energy resolution (FWHM of reconstructed energy spectrum) is: ', num2str(Energy_Resolution), '%'))
+            %
+            %         end
+            
+            %%  DOI calculation
+            %filtraggio spaziale del Frame
+            if doiflag == 1
+                n_eventi=size(Frame,1);
+                %number of groups
+                n_groups=4;
+                %% DOI Computation
+                
+                %here mean and std are evaluated starting from the LUT, then the log likelihood is computed and the Z groups are assigned where the likelihood is max
+                
+                %        Spotfiles = dir(fullfile('/SAN/inm/INSERT/amoINSERT/DOI/HSR/','*Frame*'));
+                clear('SPOTS_fitting');
+                Spotfiles = dir(fullfile('/media/ashley/My Passport/DOI/HSR/','*Frame*'));
+                Spotfilename = strcat(Spotfiles(jj).folder,'/',Spotfiles(jj).name,'/SPOTs_fitting.mat');
+                load(Spotfilename,'SPOTS_fitting');
+                
+                media=cell(n_groups,1);
+                stdev=cell(n_groups,1);
+                log_L=zeros(n_eventi, n_groups);
+                Z_CLASS=zeros(n_eventi,1);
+                
+                for k=1:n_groups
+                    disp(['Processing sigma and mean group ', num2str(k)])
+                     parfor ch=1:n_chan
+                        medias(:,ch)=feval(SPOTS_fitting{ch}.fitting_media{k},[output.x_rec', output.y_rec']);
+                        stdevs(:,ch)= feval(SPOTS_fitting{ch}.fitting_stddev{k},[output.x_rec', output.y_rec']);
+                    end
+                    media{k} = medias;
+                    stdev{k} = stdevs;
+                end
+                clear('medias');
+                clear('stdevs');
+                disp('DOI calculated');
+                % use LUT to avoid this fitting ^
+                
+                for idx=1:n_eventi
+                    for k=1:n_groups
+                        log_L(idx,k)=-sum(ones(size(stdev{k}(idx,:)))*log(sqrt(2*pi))+log(stdev{k}(idx,:))+((Frame(idx,:)-media{k}(idx, :)).^2)./(2*stdev{k}(idx,:).*stdev{k}(idx,:)));
+                    end
+                end
+                
+                trovaM=@(vettore) find(vettore == max(vettore));
+                for idx=1:n_eventi
+                    Z_CLASS(idx)=trovaM(log_L(idx,:));
+                end
+                % Split Frame into 4 layers
+                
+                %%
+                for k = 1:4
+                    [MeshX,~] = meshgrid(Z_CLASS == k,1:72);
+                    FraLay{k} = reshape(Frame(MeshX'),[],72);
+                    Tune.Num_rec=size(FraLay{k},1);
+                    %[output.x_rec,output.y_rec,output.energy,output.error,Filt] = StatisticalMethod(FraLay{k},Par,Tune,Filt );
+                    
+                    outputLay.energy = output.energy(Z_CLASS == k);
+                    outputLay.x_rec_CM = output.x_rec_CM(Z_CLASS == k);
+                    outputLay.y_rec_CM = output.y_rec_CM(Z_CLASS == k);
+                    outputLay.x_rec = output.x_rec(Z_CLASS == k);
+                    outputLay.y_rec = output.y_rec(Z_CLASS == k);
+                    outputLay.error = output.error(Z_CLASS == k);
+                    Par.pixel = 0.2;%mm
+                    disp('ML DOI Recon');
+                    [output.Statistical_Counts]=DisplayReconstruction(outputLay,Par,Filt,Tune,0,0);
+                    
+                    
+                    %% SAVE RECONSTRUCTION
+                    % Reconstructed event positions (X,Y), energy, reconstruction error are
+                    % stored in the 'output' structured variable. This one is saved in
+                    % Database_Reconstructions folder
+                    AllData{ii,jj,k} = output;
+                end
+            else
+                disp('ML Recon');
+                [output.Statistical_Counts]=DisplayReconstruction(output,Par,Filt,Tune,0,0);
+                AllData{ii,jj} = output;
+            end
+            
     end
-    % <<<<<<< Updated upstream
-
-    % =======
-    rmpath(strcat(pwd,'/Geometries'));
-    rmpath(strcat(pwd,'/Functions'));
-    rmpath(strcat(pwd,'/Database'));
-    
-    addpath(strcat(pwd,'/MATLAB_modified_Main_Split'));
-    addpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions'));
-    addpath(strcat(pwd,'/MATLAB_modified_Main_Split/Geometries'));
-    addpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
-    
+        % <<<<<<< Updated upstream
+        % =======
+        rmpath(strcat(pwd,'/Geometries'));
+        rmpath(strcat(pwd,'/Functions'));
+        rmpath(strcat(pwd,'/Database'));
+        
+        addpath(strcat(pwd,'/MATLAB_modified_Main_Split'));
+        addpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions'));
+        addpath(strcat(pwd,'/MATLAB_modified_Main_Split/Geometries'));
+        addpath(strcat(pwd,'/MATLAB_modified_Main_Split/Functions/dataFunctions'));
     
 end
 
@@ -502,20 +444,24 @@ if doiflag == 1
     for k = 1:4
         for i = n-num_nodes+1:n
             for j = 1:Datasize-1
-                chunkData(:,:,j,k) = AllData{j,i,k}.Statistical_Counts;
                 
+                if ~isempty(AllData{j,i,k}) == 1
+                    chunkData(:,:,j,+k) = AllData{j,i,k}.Statistical_Counts;
+                else
+                    chunkData(:,:,j,kk) = chunkData(:,:,j,kk);
+                end
             end
             NodeData{i,k} = sum(chunkData(:,:,:,k),3);
             
             chunkData = zeros(258,506,Datasize-1,4);
         end
-        NodeData = NodeData(~cellfun('isempty',NodeData));
+        %NodeData = NodeData(~cellfun('isempty',NodeData));
     end
-
+    
     output_savepath = strcat(pwd,'/Database_Reconstructions/DOI_Rec',outname,filename(1:end-5),'.mat');
-   
+    
     save(output_savepath,'NodeData','enwind','-v7.3');
-    disp('Saved!');
+    disp('Saved DOI!');
 else
     chunkData = zeros(258,506,Datasize-1);
     NodeData = cell(n,1);
@@ -533,7 +479,7 @@ else
         chunkData = zeros(258,506,Datasize-1);
     end
     
-    NodeData = NodeData(~cellfun('isempty',NodeData));
+    %NodeData = NodeData(~cellfun('isempty',NodeData));
     
     output_savepath = strcat(pwd,'/Database_Reconstructions/Full_Rec_',outname,filename(1:end-5),'.mat');
     save(output_savepath,'NodeData','enwind','-v7.3');
